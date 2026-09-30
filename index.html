@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html lang="cs" class="light">
 <head>
-  <!-- Propojení s PWA manifestem -->
-  <link rel="manifest" href="manifest.json">
-  
-  <!-- KLÍČOVÉ: Nastavení pro zobrazení 1:1 na mobilech a podpora výřezů (Notch / Dynamic Island) -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
-  <!-- Vzhled pro iPhone (skryje adresní řádek prohlížeče) -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="UniGO">
-  
-  <!-- Ikona aplikace, která se zobrazí na ploše iPhonu -->
-  <link rel="apple-touch-icon" href="icon-192.png">
-  
+<!-- Propojení s PWA manifestem -->
+<link rel="manifest" href="manifest.json">
+<!-- Vzhled pro iPhone (skryje adresní řádek prohlížeče) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UniGO">
+<!-- Ikona aplikace, která se zobrazí na ploše iPhonu -->
+<link rel="apple-touch-icon" href="icon-192.png">
   <meta charset="UTF-8">
   <title>VŠB UniGO - Oficiální kampusová navigace</title>
   <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/bahnschrift">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
   <!-- Leaflet CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-  
   <!-- QRCode.js pro generování QR kódů -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,13 +33,7 @@
     }
   </script>
   <style>
-    body { 
-      font-family: 'Bahnschrift', sans-serif; 
-      overflow: hidden;
-      /* Ochrana pro iOS lištu a dynamic island */
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-    }
+    body { font-family: 'Bahnschrift', sans-serif; overflow: hidden; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
@@ -95,8 +81,8 @@
   </div>
 
 
-  <!-- HLAVNÍ KONTEJNER APLIKACE: Upraveno na w-full h-full, aby na mobilu nezůstávaly okraje a aplikace běžela přes celý displej -->
-  <div id="app-wrapper" class="w-full h-full sm:h-[880px] bg-white dark:bg-gray-900 sm:rounded-[36px] sm:shadow-2xl overflow-hidden flex flex-col relative sm:max-w-[420px] mx-auto border-0 sm:border border-gray-200 dark:border-gray-800">
+  <!-- HLAVNÍ KONTEJNER APLIKACE -->
+  <div id="app-wrapper" class="w-full h-full sm:h-[880px] bg-white dark:bg-gray-900 sm:rounded-[36px] sm:shadow-2xl overflow-hidden flex flex-col relative max-w-[420px] mx-auto border-0 sm:border border-gray-200 dark:border-gray-800">
 
     <!-- 1. PŘIHLÁŠENÍ & REGISTRACE -->
     <div id="screen-auth" class="absolute inset-0 z-40 bg-white dark:bg-gray-900 p-6 flex flex-col justify-between overflow-y-auto">
@@ -143,11 +129,701 @@
             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Fakulta</label>
             <select id="reg-faculty" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-bold text-vsb-500">
               <option value="FEI">Fakulta elektrotechniky a informatiky (FEI)</option>
+              <option value="FAST">Fakulta stavební (FAST)</option>
+              <option value="EkF">Ekonomická fakulta (EkF)</option>
+              <option value="HGF">Hornicko-geologická fakulta (HGF)</option>
+              <option value="FMMI">Fakulta materiálově-technologická (FMMI)</option>
+              <option value="FS">Fakulta strojní (FS)</option>
             </select>
           </div>
+          <div>
+            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Heslo</label>
+            <input type="password" id="reg-pass" placeholder="••••••••" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-sm">
+          </div>
+          <button onclick="handleRegister()" class="w-full py-3.5 bg-vsb-500 hover:bg-vsb-600 text-white font-bold rounded-xl shadow-lg transition mt-2">Vytvořit účet</button>
+        </div>
+
+      </div>
+      <div class="text-center text-[11px] text-gray-400 mt-4">VŠB-TUO Poruba © 2026 • Produkční verze</div>
+    </div>
+
+
+    <!-- 2. HLAVNÍ APLIKACE -->
+    <div id="screen-main" class="flex flex-col h-full hidden w-full">
+      
+      <!-- HORNÍ LIŠTA -->
+      <header class="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-white dark:bg-gray-900 z-10 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-vsb-500 text-white flex items-center justify-center font-bold text-lg shadow-md"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div>
+            <p id="header-faculty" class="text-[10px] font-bold text-vsb-500 uppercase tracking-wider">FEI • VŠB-TUO</p>
+            <h2 id="header-username" class="text-sm font-bold">Tomáš Novotný</h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="document.documentElement.classList.toggle('dark')" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 transition">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <div class="px-3 py-1.5 rounded-xl bg-vsb-50 text-vsb-500 font-bold text-xs shadow-sm border border-vsb-100"><span id="user-xp">650</span> XP</div>
+        </div>
+      </header>
+
+      <!-- OBSAH ZÁLOŽEK -->
+      <main class="flex-1 relative bg-gray-50 dark:bg-gray-950 w-full overflow-hidden">
+        
+        <!-- ZÁLOŽKA 1: MAPA -->
+        <div id="tab-map" class="tab-content absolute inset-0 w-full h-full flex flex-col">
+          <div id="leaflet-map" class="absolute inset-0 z-0"></div>
+
+          <!-- Rychlá lišta vybraných míst -->
+          <div class="absolute top-4 left-4 right-4 flex gap-2 overflow-x-auto no-scrollbar z-20 pb-2 pointer-events-auto">
+            <button onclick="centerBuilding('fei')" class="bg-emerald-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg whitespace-nowrap"><i class="fa-solid fa-bolt mr-1"></i> FEI</button>
+            <button onclick="centerBuilding('menza')" class="bg-amber-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg whitespace-nowrap"><i class="fa-solid fa-burger mr-1"></i> Menza</button>
+            <button onclick="centerBuilding('koleje')" class="bg-blue-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg whitespace-nowrap"><i class="fa-solid fa-bed mr-1"></i> Koleje</button>
+            <button onclick="centerBuilding('knihovna')" class="bg-teal-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg whitespace-nowrap"><i class="fa-solid fa-book mr-1"></i> Knihovna</button>
+            <button onclick="centerBuilding('fast')" class="bg-red-600 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg whitespace-nowrap"><i class="fa-solid fa-helmet-safety mr-1"></i> FAST</button>
+          </div>
+
+          <!-- HUD Panel trasy -->
+          <div id="navigation-hud" class="absolute top-16 left-4 right-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-2 border-vsb-500 p-3.5 rounded-2xl shadow-2xl hidden z-30 transition-all">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-vsb-500"><i class="fa-solid fa-route"></i> Pěší navigace</span>
+                <h3 id="hud-dest" class="text-sm font-bold text-gray-900 dark:text-white">Cíl</h3>
+              </div>
+              <button onclick="stopNav()" class="text-gray-400 hover:text-gray-800 dark:hover:text-white bg-gray-100 dark:bg-gray-800 rounded-full w-7 h-7 flex items-center justify-center"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div class="mt-2.5 flex items-center justify-between bg-vsb-50 dark:bg-gray-800 p-2.5 rounded-xl border border-vsb-100 dark:border-gray-700">
+              <div>
+                <p id="hud-dist" class="text-xs font-bold text-vsb-500 dark:text-vsb-300">Hledám trasu po chodnících...</p>
+                <p id="hud-info" class="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Sledujte modrou čáru</p>
+              </div>
+              <div class="w-10 h-10 bg-vsb-500 text-white rounded-xl flex items-center justify-center text-lg shadow-md">
+                <i class="fa-solid fa-person-walking animate-pulse"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- GPS a SOS Tlačítka -->
+          <div class="absolute bottom-4 right-4 flex flex-col gap-3 z-20 pointer-events-auto">
+            <button onclick="centerGPS()" class="w-12 h-12 bg-white dark:bg-gray-800 text-vsb-500 dark:text-vsb-300 rounded-2xl shadow-xl flex items-center justify-center text-xl hover:scale-105 transition border border-gray-200 dark:border-gray-700" title="Moje poloha">
+              <i class="fa-solid fa-location-crosshairs"></i>
+            </button>
+            <button onclick="alert('🚨 SOS ODESLÁN OSTRAZE VŠB!')" class="w-14 h-14 bg-red-500 text-white rounded-2xl shadow-2xl flex items-center justify-center text-2xl sos-pulsing transition">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ZÁLOŽKA 2: PŘÁTELÉ A QR -->
+        <div id="tab-friends" class="tab-content absolute inset-0 p-5 hidden bg-white dark:bg-gray-950 overflow-y-auto flex flex-col">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <h2 class="text-xl font-bold">Přátelé v kampusu</h2>
+              <p class="text-xs text-gray-500">Sdílení polohy a zprávy</p>
+            </div>
+            <button onclick="openQRFriendScanner()" class="px-3.5 py-2 bg-vsb-500 hover:bg-vsb-600 text-white text-xs font-bold rounded-xl shadow flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-qrcode"></i> Můj QR kód
+            </button>
+          </div>
+          
+          <div id="friends-list" class="space-y-3 flex-1">
+            <div onclick="openChat('Klára Veselá', 'FAST')" class="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between cursor-pointer hover:border-vsb-500 transition">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-600 font-bold flex items-center justify-center text-sm">K</div>
+                <div>
+                  <h4 class="text-sm font-bold">Klára Veselá <span class="text-[10px] text-gray-400 font-normal">FAST</span></h4>
+                  <p class="text-xs text-gray-500">U Menzy, čekám na oběd...</p>
+                </div>
+              </div>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            </div>
+
+            <div onclick="openChat('Martin Horák', 'FEI')" class="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between cursor-pointer hover:border-vsb-500 transition">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center text-sm">M</div>
+                <div>
+                  <h4 class="text-sm font-bold">Martin Horák <span class="text-[10px] text-gray-400 font-normal">FEI</span></h4>
+                  <p class="text-xs text-gray-500">Jsem v laboratořích IT4I</p>
+                </div>
+              </div>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZÁLOŽKA 3: QUESTY -->
+        <div id="tab-quests" class="tab-content absolute inset-0 p-5 hidden bg-white dark:bg-gray-950 overflow-y-auto">
+          <div class="bg-gradient-to-br from-vsb-600 to-vsb-800 text-white p-5 rounded-3xl shadow-xl mb-5">
+            <p class="text-xs uppercase tracking-wider text-emerald-200 font-bold">Student Progress</p>
+            <div class="flex justify-between items-end mt-1">
+              <h2 id="quest-xp" class="text-2xl font-bold">650 XP</h2>
+              <span class="bg-amber-400 text-gray-900 text-xs font-bold px-3 py-1 rounded-full">Badatel</span>
+            </div>
+            <div class="w-full bg-black/20 h-2.5 rounded-full overflow-hidden mt-3">
+              <div id="quest-bar" class="bg-amber-400 h-full rounded-full transition-all duration-500" style="width: 43%;"></div>
+            </div>
+          </div>
+
+          <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">Aktivní Campus Questy</h3>
+          
+          <div class="space-y-3">
+            <div id="quest-item-walk" class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-bold">🚶 Maratonec v kampusu</h4>
+                <p class="text-xs text-gray-500 mt-0.5">Ujdi celkem 300 metrů (Nachozeno: <span id="walked-meters">0</span> / 300 m)</p>
+              </div>
+              <button id="btn-claim-walk" onclick="claimQuest('walk', 100)" disabled class="px-3.5 py-2 bg-gray-300 dark:bg-gray-800 text-gray-500 text-xs font-bold rounded-xl cursor-not-allowed transition">Splnit (+100 XP)</button>
+            </div>
+
+            <div id="quest-item-friend" class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-bold">🤝 Sociální síť</h4>
+                <p class="text-xs text-gray-500 mt-0.5">Ukaž svůj QR kód a přidej kamaráda (+80 XP)</p>
+              </div>
+              <button id="btn-claim-friend" onclick="claimQuest('friend', 80)" disabled class="px-3.5 py-2 bg-gray-300 dark:bg-gray-800 text-gray-500 text-xs font-bold rounded-xl cursor-not-allowed transition">Splnit (+80 XP)</button>
+            </div>
+
+            <div id="quest-item-rescue" class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-bold">🛡️ Kampusový záchranář</h4>
+                <p class="text-xs text-gray-500 mt-0.5">Dojdi k Aule a pomoz ztracenému prvákovi (+150 XP)</p>
+              </div>
+              <button onclick="completeRescueQuest()" class="px-3.5 py-2 bg-vsb-500 hover:bg-vsb-600 text-white text-xs font-bold rounded-xl shadow transition">Splnit (+150 XP)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZÁLOŽKA 4: ŽEBŘÍČEK -->
+        <div id="tab-leaderboard" class="tab-content absolute inset-0 p-5 hidden bg-white dark:bg-gray-950 overflow-y-auto space-y-4">
+          <div>
+            <h2 class="text-xl font-bold">Žebříček studentů</h2>
+            <p class="text-xs text-gray-500">Nejaktivnější objevitelé kampusu v tomto měsíci</p>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="p-3.5 bg-amber-50 dark:bg-amber-950/30 rounded-2xl border border-amber-200 dark:border-amber-900 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-amber-400 text-gray-900 font-bold flex items-center justify-center text-xs">1</div>
+                <div><h4 class="text-sm font-bold">Ondřej Novotný</h4><p class="text-[10px] text-gray-500">FEI • 3. ročník</p></div>
+              </div>
+              <span class="text-xs font-bold text-amber-600 dark:text-amber-400">2 450 XP</span>
+            </div>
+            <div class="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-bold flex items-center justify-center text-xs">2</div>
+                <div><h4 class="text-sm font-bold">Lucie Kovaříková</h4><p class="text-[10px] text-gray-500">EkF • 1. ročník</p></div>
+              </div>
+              <span class="text-xs font-bold text-gray-600 dark:text-gray-300">1 890 XP</span>
+            </div>
+            <div id="my-rank-card" class="p-3.5 bg-vsb-50 dark:bg-vsb-950/40 rounded-2xl border border-vsb-500 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-vsb-500 text-white font-bold flex items-center justify-center text-xs">14</div>
+                <div><h4 id="leaderboard-my-name" class="text-sm font-bold">Tomáš Novotný (Ty)</h4><p id="leaderboard-my-fac" class="text-[10px] text-vsb-600 dark:text-vsb-300">FEI</p></div>
+              </div>
+              <span id="leaderboard-my-xp" class="text-xs font-bold text-vsb-600 dark:text-vsb-300">650 XP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ZÁLOŽKA 5: AKUALITY & MENZA & DOPRAVA -->
+        <div id="tab-news" class="tab-content absolute inset-0 p-5 hidden bg-white dark:bg-gray-950 overflow-y-auto space-y-4">
+          <div>
+            <h2 class="text-xl font-bold">Aktuality & Menza VŠB</h2>
+            <p class="text-xs text-gray-500">Reálné novinky z kampusu Poruba a jídelníček</p>
+          </div>
+
+          <div class="bg-amber-500 text-gray-900 p-4 rounded-2xl shadow-md space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider bg-white/40 px-2 py-0.5 rounded">Hlavní Menza • Dnes</span>
+              <i class="fa-solid fa-utensils"></i>
+            </div>
+            <h4 class="font-bold text-base">Mleté vepřové biftečky s anglickou slaninou, pepřová omáčka, pečené brambory</h4>
+            <p class="text-xs opacity-90">Salátový bufet k dispozici. Čekací doba u výdeje v 3. NP: cca 3 minuty.</p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-1">
+              <span class="text-[10px] text-vsb-500 font-bold uppercase">Věda a Výzkum VŠB-TUO</span>
+              <h4 class="text-sm font-bold">Nová 3D tiskárna kovů v Protolabu na FS</h4>
+              <p class="text-xs text-gray-500">Centrum 3D tisku Protolab na Fakultě strojní získalo díky projektu REFRESH unikátní tiskárnu za 22 milionů Kč.</p>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-1">
+              <span class="text-[10px] text-emerald-600 font-bold uppercase">Campus Life</span>
+              <h4 class="text-sm font-bold">Daruj krev s EKFR a Matějem Šínem</h4>
+              <p class="text-xs text-gray-500">Zapojte se do univerzitní štafety Báňská kapka krve s patronem Matějem Šínem a zachraňte život.</p>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-1">
+              <span class="text-[10px] text-blue-600 font-bold uppercase">Doprava a parkování</span>
+              <h4 class="text-sm font-bold">Zastávka VŠB-TUO & Parkování</h4>
+              <p class="text-xs text-gray-500">Autobusové a tramvajové spoje (linky 3, 7, 8, 17) jezdí dle běžného harmonogramu. Parkoviště u kolejišť je plné z 72 %.</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- SPODNÍ MENU -->
+      <nav class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 px-4 py-2.5 flex justify-between items-center z-10 shrink-0 pb-safe">
+        <button onclick="switchTab('map')" id="nav-btn-map" class="flex flex-col items-center text-vsb-500 transition"><i class="fa-solid fa-map text-base mb-0.5"></i><span class="text-[9px] font-bold">Mapa</span></button>
+        <button onclick="switchTab('friends')" id="nav-btn-friends" class="flex flex-col items-center text-gray-400 transition"><i class="fa-solid fa-user-group text-base mb-0.5"></i><span class="text-[9px] font-bold">Přátelé</span></button>
+        
+        <!-- TLAČÍTKO MŮJ QR KÓD (Uprostřed) -->
+        <button onclick="openQRFriendScanner()" class="w-13 h-13 bg-vsb-500 hover:bg-vsb-600 text-white rounded-2xl shadow-xl flex items-center justify-center text-xl -mt-5 border-4 border-white dark:border-gray-900 transition hover:scale-105" title="Můj QR kód">
+          <i class="fa-solid fa-qrcode"></i>
+        </button>
+
+        <button onclick="switchTab('quests')" id="nav-btn-quests" class="flex flex-col items-center text-gray-400 transition"><i class="fa-solid fa-trophy text-base mb-0.5"></i><span class="text-[9px] font-bold">Questy</span></button>
+        <button onclick="switchTab('leaderboard')" id="nav-btn-leaderboard" class="flex flex-col items-center text-gray-400 transition"><i class="fa-solid fa-ranking-star text-base mb-0.5"></i><span class="text-[9px] font-bold">Žebříček</span></button>
+        <button onclick="switchTab('news')" id="nav-btn-news" class="flex flex-col items-center text-gray-400 transition"><i class="fa-solid fa-bullhorn text-base mb-0.5"></i><span class="text-[9px] font-bold">Menza</span></button>
+      </nav>
+    </div>
+
+    <!-- MODÁLNÍ OKNO CHATU -->
+    <div id="modal-chat" class="absolute inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button onclick="closeChat()" class="text-gray-500 hover:text-gray-700"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+          <h3 id="chat-title" class="font-bold text-base">Klára Veselá</h3>
+        </div>
+        <span class="text-xs text-emerald-600 font-medium">Online</span>
+      </div>
+      <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50 dark:bg-gray-950">
+        <div class="flex justify-start">
+          <div class="bg-gray-200 dark:bg-gray-800 p-3 rounded-2xl text-xs max-w-[80%]">Ahoj! Kde jsi v kampusu?</div>
         </div>
       </div>
+      <div class="p-3 border-t border-gray-200 dark:border-gray-800 flex gap-2">
+        <input type="text" id="chat-input" placeholder="Napište zprávu..." class="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 rounded-xl text-xs focus:outline-none">
+        <button onclick="sendChatMessage()" class="px-4 py-2.5 bg-vsb-500 text-white rounded-xl text-xs font-bold">Odeslat</button>
+      </div>
     </div>
+
+    <!-- MODÁLNÍ OKNO: MŮJ QR KÓD (S OPRAVENÝM RENDEREM) -->
+    <div id="modal-qr-friend" class="absolute inset-0 bg-black/85 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 hidden text-white text-center">
+      <div class="bg-white text-gray-900 p-6 rounded-[32px] w-full max-w-xs shadow-2xl space-y-4">
+        <div class="w-14 h-14 bg-vsb-500 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md">
+          <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <h3 class="text-lg font-bold">Tvůj Campus QR Kód</h3>
+        <p class="text-xs text-gray-500">Ukaž tento kód kamarádovi k naskenování v aplikaci.</p>
+        
+        <!-- Renderovací kontejner QR kódu -->
+        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200 flex flex-col items-center justify-center">
+          <div id="qrcode-render" class="bg-white p-3 rounded-xl shadow-sm flex items-center justify-center min-h-[140px] min-w-[140px]"></div>
+          <span id="qr-user-label" class="text-[10px] text-vsb-600 font-bold mt-2 uppercase">student@vsb.cz</span>
+        </div>
+
+        <button onclick="simulateScanFriend()" class="w-full py-3 bg-vsb-500 hover:bg-vsb-600 text-white font-bold rounded-xl text-xs shadow transition">
+          Simulovat naskenování přítele
+        </button>
+        <button onclick="closeQRFriendScanner()" class="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition">
+          Zavřít
+        </button>
+      </div>
+    </div>
+
   </div>
+
+  <!-- JAVASCRIPT: PRODUKČNÍ LOGIKA A OPRAVA QR KÓDU -->
+  <script>
+    let currentUser = { name: "Tomáš Novotný", email: "tomas.student@vsb.cz", faculty: "FEI", xp: 650 };
+    let map = null;
+    let userMarker = null;
+    let routeLine = null;
+    let watchId = null;
+    let navTarget = null;
+    let currentPos = { lat: 49.83108, lng: 18.16084 };
+
+    let totalWalkedMeters = 0;
+    let lastGPSPos = null;
+    let friendAddedViaQR = false;
+
+    function setDeviceMode(mode) {
+      const wrapper = document.getElementById('app-wrapper');
+      document.getElementById('screen-device-select').classList.add('hidden');
+      if (mode === 'mobile') {
+        wrapper.className = "w-full h-full sm:h-[840px] bg-white dark:bg-gray-900 sm:rounded-[36px] overflow-hidden flex flex-col relative max-w-[400px] shadow-2xl mx-auto border-0 sm:border border-gray-200 dark:border-gray-800";
+      } else if (mode === 'tablet') {
+        wrapper.className = "w-full h-full sm:h-[880px] bg-white dark:bg-gray-900 sm:rounded-[32px] overflow-hidden flex flex-col relative max-w-[720px] shadow-2xl mx-auto border-0 sm:border border-gray-200 dark:border-gray-800";
+      } else {
+        wrapper.className = "w-full h-full sm:h-[900px] bg-white dark:bg-gray-900 sm:rounded-[24px] overflow-hidden flex flex-col relative max-w-6xl shadow-2xl mx-auto border-0 sm:border border-gray-200 dark:border-gray-800";
+      }
+      if(map) map.invalidateSize();
+    }
+
+    function switchAuthTab(tab) {
+      if (tab === 'login') {
+        document.getElementById('form-login').classList.remove('hidden');
+        document.getElementById('form-register').classList.add('hidden');
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-gray-700 shadow-sm transition";
+        document.getElementById('tab-reg-btn').className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-500 transition";
+      } else {
+        document.getElementById('form-login').classList.add('hidden');
+        document.getElementById('form-register').classList.remove('hidden');
+        document.getElementById('tab-reg-btn').className = "flex-1 py-2 text-xs font-bold rounded-lg bg-white dark:bg-gray-700 shadow-sm transition";
+        document.getElementById('tab-login-btn').className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-500 transition";
+      }
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-pass').value;
+      if(!email || !pass) { alert("Vyplňte e-mail a heslo."); return; }
+
+      const savedUser = localStorage.getItem('vsb_user_' + email);
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+      } else if (email === 'tomas.student@vsb.cz') {
+        currentUser = { name: "Tomáš Novotný", email: "tomas.student@vsb.cz", faculty: "FEI", xp: 650 };
+      } else {
+        currentUser = { name: email.split('@')[0], email: email, faculty: "FEI", xp: 500 };
+      }
+
+      initUserSession();
+    }
+
+    function handleRegister() {
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const faculty = document.getElementById('reg-faculty').value;
+      const pass = document.getElementById('reg-pass').value;
+
+      if (!name || !email || !pass) { alert("Prosím vyplňte všechna pole pro registraci."); return; }
+
+      currentUser = { name, email, faculty, xp: 500 };
+      localStorage.setItem('vsb_user_' + email, JSON.stringify(currentUser));
+      
+      alert("Registrace proběhla úspěšně! Vítejte v systému VŠB UniGO.");
+      initUserSession();
+    }
+
+    function initUserSession() {
+      document.getElementById('screen-auth').classList.add('hidden');
+      document.getElementById('screen-main').classList.remove('hidden');
+      
+      document.getElementById('header-username').innerText = currentUser.name;
+      document.getElementById('header-faculty').innerText = `${currentUser.faculty} • VŠB-TUO`;
+      document.getElementById('user-xp').innerText = currentUser.xp;
+      document.getElementById('quest-xp').innerText = `${currentUser.xp} XP`;
+      document.getElementById('leaderboard-my-name').innerText = `${currentUser.name} (Ty)`;
+      document.getElementById('leaderboard-my-fac').innerText = currentUser.faculty;
+      document.getElementById('leaderboard-my-xp').innerText = `${currentUser.xp} XP`;
+
+      setTimeout(() => { 
+        initMap(); 
+        generateUserQRCode(); 
+      }, 50);
+    }
+
+    // OPRAVENÝ GENERÁTOR QR KÓDU
+    function generateUserQRCode() {
+      const container = document.getElementById('qrcode-render');
+      container.innerHTML = "";
+      document.getElementById('qr-user-label').innerText = currentUser.email;
+      try {
+        new QRCode(container, {
+          text: `VSB-UNIGO-USER:${currentUser.email}:${currentUser.name}:${currentUser.faculty}`,
+          width: 130,
+          height: 130,
+          colorDark: "#004b3c",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) {
+        container.innerHTML = `<span class="text-xs text-red-500">Chyba generování QR</span>`;
+      }
+    }
+
+    const vsbBuildings = [
+      { id: 'fei', name: 'FEI', title: 'Fakulta elektrotechniky a informatiky', lat: 49.83108, lng: 18.16084, color: '#059669', icon: '⚡',
+        floors: "<b>Přízemí:</b> Vrátnice, Bufet, Studijní odd.<br><b>1.-2. NP:</b> Velké posluchárny, PC učebny<br><b>3.-8. NP:</b> Katedry, Laboratoře" },
+      { id: 'fast', name: 'FAST', title: 'Fakulta stavební (Ludvíka Podéště)', lat: 49.84529, lng: 18.15295, color: '#dc2626', icon: '🏗️',
+        floors: "<b>Přízemí:</b> Ateliéry, Zkušebny materiálů<br><b>1.-4. NP:</b> Katedry, Děkanát" },
+      { id: 'ekf', name: 'EkF', title: 'Ekonomická fakulta', lat: 49.83307, lng: 18.16191, color: '#2563eb', icon: '📈',
+        floors: "<b>Přízemí:</b> Auly, Studijní oddělení EkF<br><b>1.-4. NP:</b> Katedry ekonomie, finance" },
+      { id: 'hgf', name: 'HGF', title: 'Hornicko-geologická fakulta', lat: 49.82940, lng: 18.16020, color: '#7c2d12', icon: '⛏️',
+        floors: "<b>Přízemí:</b> Geologická muzea, laboratoře<br><b>1.-3. NP:</b> Učebny, katedry" },
+      { id: 'fmmi', name: 'FMMI', title: 'Fakulta materiálově-technologická', lat: 49.83090, lng: 18.15930, color: '#ea580c', icon: '🧪',
+        floors: "<b>Přízemí:</b> Hutní laboratoře, zkušebny kovů<br><b>1.-4. NP:</b> Katedry chemie" },
+      { id: 'fsi', name: 'FS', title: 'Fakulta strojní (Protolab 3D tisk)', lat: 49.83368, lng: 18.16360, color: '#4f46e5', icon: '⚙️',
+        floors: "<b>Přízemí:</b> Dílny, Protolab 3D tisk kovů<br><b>1.-4. NP:</b> Katedra aplikované mechaniky" },
+      { id: 'menza', name: 'Menza', title: 'Hlavní Menza VŠB (Studentská)', lat: 49.83487, lng: 18.16312, color: '#f59e0b', icon: '🍔',
+        floors: "<b>Přízemí:</b> Pizzerie, kavárna<br><b>1. patro:</b> Hlavní výdej obědů, salátový bar" },
+      { id: 'knihovna', name: 'Knihovna', title: 'Ústřední knihovna VŠB', lat: 49.83128, lng: 18.16185, color: '#0d9488', icon: '📚',
+        floors: "<b>Přízemí:</b> Výpůjční pult<br><b>1. patro:</b> Tichá studovna<br><b>2. patro:</b> Skupinové studovny" },
+      { id: 'koleje', name: 'Koleje', title: 'Studentské rezidence (Studentská)', lat: 49.83604, lng: 18.15781, color: '#3b82f6', icon: '🛏️',
+        floors: "<b>Přízemí:</b> Recepce, posilovna<br><b>1.-13. patro:</b> Studentské pokoje" },
+      { id: 'aula', name: 'Aula', title: 'Univerzitní Aula', lat: 49.83080, lng: 18.16304, color: '#8b5cf6', icon: '🏛️',
+        floors: "<b>Přízemí:</b> Šatny, zázemí kongresů<br><b>1. patro:</b> Hlavní společenský sál (promoce)" },
+      { id: 'rektorat', name: 'Rektorát', title: 'Rektorát VŠB-TUO', lat: 49.83055, lng: 18.16056, color: '#1e3a8a', icon: '🏢',
+        floors: "<b>Přízemí:</b> Podatelna<br><b>1.-3. NP:</b> Kancelář rektora, vedení univerzity" },
+      { id: 'it4i', name: 'IT4I', title: 'IT4Innovations (Superpočítače)', lat: 49.83220, lng: 18.15647, color: '#1f2937', icon: '💻',
+        floors: "<b>Přízemí:</b> Datacentrum (Karolina, LUMI-AI)<br><b>1. NP:</b> Výzkumné týmy" }
+    ];
+    let mapMarkers = {};
+
+    function initMap() {
+      if (map) { map.invalidateSize(); return; }
+
+      map = L.map('leaflet-map', { zoomControl: false }).setView([49.8315, 18.1600], 15.5);
+
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: 'Tiles &copy; Esri'
+      }).addTo(map);
+
+      vsbBuildings.forEach(b => {
+        const customHtml = `
+          <div style="transform: translate(-50%, -100%); display: inline-flex; align-items: center; gap: 6px; background: ${b.color}; color: white; padding: 6px 12px; border-radius: 12px; font-size: 13px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); position: relative; border: 2px solid white; white-space: nowrap;">
+            <span>${b.icon}</span> ${b.name}
+            <div style="position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid white;"></div>
+            <div style="position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid ${b.color}; z-index:2;"></div>
+          </div>
+        `;
+        const icon = L.divIcon({ className: '', html: customHtml, iconSize: [0, 0] });
+        
+        const popupContent = `
+          <div style="width: 230px;">
+            <div style="background: ${b.color}; padding: 12px; color: white;">
+              <h3 style="margin: 0; font-size: 15px; font-weight: bold;">${b.icon} ${b.name}</h3>
+              <p style="margin: 2px 0 0 0; font-size: 10px; opacity: 0.9;">${b.title}</p>
+            </div>
+            <div style="padding: 12px; font-size: 11px; color: #4b5563; line-height: 1.5;">
+              ${b.floors}
+            </div>
+            <div style="padding: 0 12px 12px 12px;">
+              <button onclick="startNav(${b.lat}, ${b.lng}, '${b.name}')" style="width: 100%; background: #004b3c; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer;">
+                Navigovat sem
+              </button>
+            </div>
+          </div>
+        `;
+        
+        const marker = L.marker([b.lat, b.lng], {icon: icon}).addTo(map)
+          .bindPopup(popupContent, { closeButton: true, maxWidth: 230 });
+        
+        mapMarkers[b.id] = marker;
+      });
+
+      new ResizeObserver(() => { if(map) map.invalidateSize(); }).observe(document.getElementById('leaflet-map'));
+      trackGPS();
+    }
+
+    function centerBuilding(id) {
+      if(mapMarkers[id]) {
+        const marker = mapMarkers[id];
+        map.setView(marker.getLatLng(), 17, {animate: true});
+        marker.openPopup();
+      }
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371e3;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function trackGPS() {
+      const userHtml = `<div style="transform: translate(-50%, -50%); width:22px; height:22px; background:#3b82f6; border:3px solid white; border-radius:50%; box-shadow:0 0 15px rgba(59,130,246,0.8); animation: pulse-blue 2s infinite;"></div>`;
+      const userIcon = L.divIcon({ className: '', html: userHtml, iconSize: [0, 0] });
+
+      const renderUser = (lat, lng) => {
+        if (lastGPSPos) {
+          const distMeters = calculateDistance(lastGPSPos.lat, lastGPSPos.lng, lat, lng);
+          if (distMeters > 1 && distMeters < 500) {
+            totalWalkedMeters += Math.round(distMeters);
+            updateWalkQuest();
+          }
+        }
+        lastGPSPos = { lat, lng };
+        currentPos = { lat, lng };
+
+        if (userMarker) {
+          userMarker.setLatLng([lat, lng]);
+        } else {
+          userMarker = L.marker([lat, lng], { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+        }
+        if(navTarget) fetchOSRMRoute();
+      };
+
+      if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(
+          (pos) => renderUser(pos.coords.latitude, pos.coords.longitude),
+          (err) => {
+            renderUser(49.83108 + (Math.random()-0.5)*0.001, 18.16084 + (Math.random()-0.5)*0.001);
+          },
+          { enableHighAccuracy: true, timeout: 5000 }
+        );
+      } else {
+        renderUser(49.83108, 18.16084);
+      }
+    }
+
+    function updateWalkQuest() {
+      const display = document.getElementById('walked-meters');
+      if(display) display.innerText = totalWalkedMeters;
+      
+      if (totalWalkedMeters >= 300) {
+        const btn = document.getElementById('btn-claim-walk');
+        btn.disabled = false;
+        btn.className = "px-3.5 py-2 bg-vsb-500 hover:bg-vsb-600 text-white text-xs font-bold rounded-xl shadow transition";
+      }
+    }
+
+    function centerGPS() {
+      if (map && userMarker) {
+        map.setView([currentPos.lat, currentPos.lng], 18, {animate: true});
+      }
+    }
+
+    function startNav(lat, lon, name) {
+      navTarget = { lat, lng: lon };
+      map.closePopup();
+      document.getElementById('navigation-hud').classList.remove('hidden');
+      document.getElementById('hud-dest').innerText = name;
+      fetchOSRMRoute();
+    }
+
+    async function fetchOSRMRoute() {
+      if(!navTarget) return;
+      const osrmUrl = `https://router.project-osrm.org/route/v1/foot/${currentPos.lng},${currentPos.lat};${navTarget.lng},${navTarget.lat}?geometries=geojson`;
+
+      try {
+        const response = await fetch(osrmUrl);
+        const data = await response.json();
+
+        if (data.routes && data.routes.length > 0) {
+          const route = data.routes[0];
+          const coords = route.geometry.coordinates.map(c => [c[1], c[0]]);
+          
+          if (routeLine) map.removeLayer(routeLine);
+          routeLine = L.polyline(coords, { color: '#2563eb', weight: 7, opacity: 0.8, lineCap: 'round' }).addTo(map);
+
+          const dist = Math.round(route.distance);
+          const mins = Math.max(1, Math.round(route.duration / 60));
+
+          document.getElementById('hud-dist').innerText = `${dist} m • cca ${mins} min chůze`;
+          document.getElementById('hud-info').innerText = dist < 20 ? "🎉 Jste v cíli!" : "Nejkratší pěší trasa aktivní.";
+          
+          map.fitBounds(routeLine.getBounds(), { padding: [60, 60], animate: true });
+        }
+      } catch (error) {
+        if (routeLine) map.removeLayer(routeLine);
+        routeLine = L.polyline([ [currentPos.lat, currentPos.lng], [navTarget.lat, navTarget.lng] ], { color: '#2563eb', weight: 6, dashArray: '10, 10' }).addTo(map);
+      }
+    }
+
+    function stopNav() {
+      navTarget = null;
+      document.getElementById('navigation-hud').classList.add('hidden');
+      if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+    }
+
+    // Chat
+    function openChat(name, fac) {
+      document.getElementById('chat-title').innerText = `${name} (${fac})`;
+      document.getElementById('modal-chat').classList.remove('hidden');
+    }
+    function closeChat() {
+      document.getElementById('modal-chat').classList.add('hidden');
+    }
+    function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      if(input.value.trim() !== '') {
+        const box = document.getElementById('chat-messages');
+        box.innerHTML += `<div class="flex justify-end"><div class="bg-vsb-500 text-white p-3 rounded-2xl text-xs max-w-[80%]">${input.value}</div></div>`;
+        input.value = '';
+        box.scrollTop = box.scrollHeight;
+      }
+    }
+
+    // QR Přátelé
+    function openQRFriendScanner() {
+      document.getElementById('modal-qr-friend').classList.remove('hidden');
+      // Zajištění překreslení QR při otevření modalu
+      setTimeout(() => generateUserQRCode(), 50);
+    }
+    function closeQRFriendScanner() {
+      document.getElementById('modal-qr-friend').classList.add('hidden');
+    }
+    function simulateScanFriend() {
+      closeQRFriendScanner();
+      if (!friendAddedViaQR) {
+        friendAddedViaQR = true;
+        const list = document.getElementById('friends-list');
+        list.innerHTML += `
+          <div onclick="openChat('Ondra Svoboda', 'EkF')" class="p-3.5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex items-center justify-between cursor-pointer hover:border-vsb-500 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 font-bold flex items-center justify-center text-sm">O</div>
+              <div>
+                <h4 class="text-sm font-bold">Ondra Svoboda <span class="text-[10px] text-gray-400 font-normal">EkF</span></h4>
+                <p class="text-xs text-gray-500">Naskenován kampusový QR kód!</p>
+              </div>
+            </div>
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+          </div>
+        `;
+        
+        const btn = document.getElementById('btn-claim-friend');
+        btn.disabled = false;
+        btn.className = "px-3.5 py-2 bg-vsb-500 hover:bg-vsb-600 text-white text-xs font-bold rounded-xl shadow transition";
+        alert("🎉 Úspěšně naskenován QR kód a přidán nový přítel Ondra Svoboda!");
+      } else {
+        alert("Tohoto přítele už v seznamu máš.");
+      }
+    }
+
+    // Questy claim
+    function claimQuest(type, xpVal) {
+      currentUser.xp += xpVal;
+      updateXPDisplay();
+
+      if (type === 'walk') {
+        const item = document.getElementById('quest-item-walk');
+        item.innerHTML = `<div><h4 class="text-sm font-bold text-emerald-600">✓ Splněno: Maratonec</h4><p class="text-xs text-gray-400">Získáno +${xpVal} XP</p></div><span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3.5 py-1.5 rounded-xl">Hotovo</span>`;
+      } else if (type === 'friend') {
+        const item = document.getElementById('quest-item-friend');
+        item.innerHTML = `<div><h4 class="text-sm font-bold text-emerald-600">✓ Splněno: Sociální síť</h4><p class="text-xs text-gray-400">Získáno +${xpVal} XP</p></div><span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3.5 py-1.5 rounded-xl">Hotovo</span>`;
+      }
+      alert(`Skvělá práce! Získal/a jsi +${xpVal} XP.`);
+    }
+
+    function completeRescueQuest() {
+      currentUser.xp += 150;
+      updateXPDisplay();
+
+      const item = document.getElementById('quest-item-rescue');
+      item.innerHTML = `<div><h4 class="text-sm font-bold text-emerald-600">✓ Splněno: Záchranář</h4><p class="text-xs text-gray-400">Získáno +150 XP</p></div><span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3.5 py-1.5 rounded-xl">Hotovo</span>`;
+      alert("Hrdinský čin dokončen! Pomohl jsi studentovi u Auly a připsal sis +150 XP.");
+    }
+
+    function updateXPDisplay() {
+      document.getElementById('quest-xp').innerText = `${currentUser.xp} XP`;
+      document.getElementById('user-xp').innerText = currentUser.xp;
+      document.getElementById('leaderboard-my-xp').innerText = `${currentUser.xp} XP`;
+      let pct = Math.min((currentUser.xp / 2500) * 100, 100);
+      document.getElementById('quest-bar').style.width = `${pct}%`;
+      
+      localStorage.setItem('vsb_user_' + currentUser.email, JSON.stringify(currentUser));
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      
+      ['map', 'friends', 'quests', 'leaderboard', 'news'].forEach(t => {
+        const btn = document.getElementById(`nav-btn-${t}`);
+        if(btn) btn.className = t === tabId ? "flex flex-col items-center text-vsb-500 transition" : "flex flex-col items-center text-gray-400 transition";
+      });
+      
+      if (tabId === 'map' && map) setTimeout(() => map.invalidateSize(), 50);
+    }
+  </script>
 </body>
 </html>
