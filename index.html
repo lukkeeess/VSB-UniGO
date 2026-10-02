@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VŠB UniGO - Ultimate Campus Masterpiece</title>
+  <title>VŠB UniGO – živá navigace kampusem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -1101,5 +1101,215 @@
       rCtx.shadowBlur = 0;
     }
   </script>
+<style>
+  /* ===== UniGO v2: nový vzhled ===== */
+  body{background:#05060a}
+  header{background:linear-gradient(120deg,rgba(10,12,20,.92),rgba(10,12,20,.75)) !important;position:relative}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--brand-color),#22d3ee,#a855f7,#f43f5e,var(--brand-color));background-size:300% 100%;animation:aurora 8s linear infinite}
+  @keyframes aurora{to{background-position:300% 0}}
+  nav{background:rgba(12,13,20,.92) !important;margin:0 10px 10px;border-radius:24px;border:1px solid rgba(255,255,255,.08) !important;box-shadow:0 18px 40px -12px rgba(0,0,0,.8)}
+  nav button{padding:8px 14px;border-radius:16px;transition:all .25s}
+  nav button.text-brand-500{background:color-mix(in srgb,var(--brand-color) 18%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--brand-color) 45%,transparent)}
+  #tab-quests,#tab-game,#tab-profile{background:radial-gradient(900px 400px at 10% -10%,color-mix(in srgb,var(--brand-color) 22%,transparent),transparent),radial-gradient(700px 400px at 110% 10%,rgba(168,85,247,.14),transparent),#07080d !important}
+  .ug-glass{background:rgba(14,15,23,.9);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.09);box-shadow:0 24px 50px -16px rgba(0,0,0,.85)}
+  .ug-me{position:relative;width:22px;height:22px;transform:translate(-50%,-50%)}
+  .ug-me i{position:absolute;inset:0;border-radius:50%;background:#3b82f6;border:3px solid #fff;box-shadow:0 0 0 2px rgba(59,130,246,.4),0 4px 14px rgba(59,130,246,.7)}
+  .ug-me b{position:absolute;inset:-14px;border-radius:50%;background:rgba(59,130,246,.35);animation:ug-ping 1.8s ease-out infinite}
+  @keyframes ug-ping{from{transform:scale(.4);opacity:1}to{transform:scale(1.6);opacity:0}}
+  .ug-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:11px;font-weight:800}
+  .ug-dest{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);text-align:left;transition:transform .15s,background .15s}
+  .ug-dest:active{transform:scale(.97)}.ug-dest:hover{background:rgba(255,255,255,.07)}
+  .ug-ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+  .ug-tram{transform:translate(-50%,-50%);display:flex;align-items:center;gap:4px;background:#fff;color:#c8102e;border:3px solid #c8102e;border-radius:12px;padding:3px 7px;font-size:11px;font-weight:900;white-space:nowrap;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+  .ug-opt{width:100%;text-align:left;padding:12px 14px;border-radius:14px;background:#14151d;border:1px solid #27272a;font-size:13px;font-weight:700;color:#e4e4e7;transition:all .2s}
+  .ug-opt:hover:not(:disabled){border-color:var(--brand-color);transform:translateX(3px)}
+  .ug-opt.ok{background:rgba(16,185,129,.18);border-color:#10b981;color:#a7f3d0}
+  .ug-opt.bad{background:rgba(244,63,94,.18);border-color:#f43f5e;color:#fecdd3}
+  .ug-arrived{animation:pop-in .4s cubic-bezier(.175,.885,.32,1.275)}
+</style>
+
+<!-- Panel Kam jdeš? -->
+<div id="ug-sheet" class="ug-glass" style="position:absolute;left:12px;right:84px;bottom:12px;z-index:31;border-radius:24px;padding:12px;max-width:420px;display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <div><p style="font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--brand-color)">KAM JDEŠ?</p>
+    <p id="ug-gps-status" style="font-size:11px;color:#a1a1aa;font-weight:600">Zjišťuji tvoji polohu…</p></div>
+    <button id="ug-toggle" onclick="ugToggleSheet()" style="font-size:11px;font-weight:800;color:#d4d4d8;background:#27272a;border-radius:10px;padding:6px 10px">Skrýt</button>
+  </div>
+  <div id="ug-list" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;max-height:34vh;overflow-y:auto" class="no-scrollbar"></div>
+</div>
+<div id="ug-toast" class="ug-glass" style="position:absolute;left:50%;top:84px;transform:translateX(-50%);z-index:60;border-radius:18px;padding:10px 16px;font-size:12px;font-weight:800;display:none;max-width:90vw;text-align:center"></div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  let accCircle = null, hasFix = false, firstFix = true, watchId = null, follow = true, arrived = false;
+
+  // ===== Tramvajové zastávky VŠB-TUO (linky směr Svinov mosty / Poruba) =====
+  const tramStops = [
+    { id:'tram-svinov', name:'VŠB-TUO', dir:'směr Svinov mosty', lat:49.83118, lng:18.16446 },
+    { id:'tram-poruba', name:'VŠB-TUO', dir:'směr Poruba / Vřesinská', lat:49.83132, lng:18.16468 }
+  ];
+  const idos = (from,to) => `https://idos.cz/ostrava/spojeni/?f=${encodeURIComponent(from)}&t=${encodeURIComponent(to)}`;
+
+  function toast(msg, ms=2600){ const t=$('ug-toast'); t.innerHTML=msg; t.style.display='block'; clearTimeout(t._h); t._h=setTimeout(()=>t.style.display='none',ms); }
+  window.ugToast = toast;
+
+  function addTramStops(){
+    if(!map || window._ugTrams) return; window._ugTrams = true;
+    tramStops.forEach(s=>{
+      const icon = L.divIcon({className:'', html:`<div class="ug-tram"><i class="fa-solid fa-train-tram"></i> ${s.name}</div>`, iconSize:[0,0]});
+      const html = `<div style="width:230px;padding:8px">
+        <div style="font-weight:900;font-size:14px">🚋 Zastávka ${s.name}</div>
+        <div style="font-size:11px;color:#a1a1aa;margin:2px 0 8px">${s.dir} · tramvaje mezi Porubou a Svinovem</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <button onclick="playBeep(); startNav(${s.lat}, ${s.lng}, 'Tram VŠB-TUO')" style="background:var(--brand-color);color:#fff;border:0;padding:9px;border-radius:10px;font-weight:800;font-size:11px">Navigovat</button>
+          <a href="${idos('VŠB-TUO','Svinov mosty')}" target="_blank" rel="noopener" style="background:#27272a;color:#fff;padding:9px;border-radius:10px;font-weight:800;font-size:11px;text-align:center;text-decoration:none">Odjezdy ↗</a>
+        </div></div>`;
+      mapMarkers[s.id] = L.marker([s.lat,s.lng],{icon, zIndexOffset:500}).addTo(map).bindPopup(html);
+    });
+    // čip do horní lišty
+    const chips = $('building-chips');
+    if(chips) chips.insertAdjacentHTML('afterbegin', `<button onclick="playBeep(); centerBuilding('tram-svinov')" class="bg-zinc-900/95 backdrop-blur-md border border-red-500/60 text-red-300 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-train-tram"></i> Tram VŠB-TUO</button>`);
+  }
+
+  // ===== Seznam cílů seřazený podle vzdálenosti od tebe =====
+  function renderList(){
+    const list = $('ug-list'); if(!list) return;
+    const items = [...vsbBuildings.map(b=>({id:b.id,name:b.name,title:b.title,lat:b.lat,lng:b.lng,icon:b.icon,color:b.color})),
+                   {id:'tram-svinov',name:'Tram VŠB-TUO',title:'Tramvaj na Svinov mosty',lat:tramStops[0].lat,lng:tramStops[0].lng,icon:'🚋',color:'#C8102E'}];
+    items.forEach(i=>i.d = calculateDistance(currentPos.lat,currentPos.lng,i.lat,i.lng));
+    items.sort((a,b)=>a.d-b.d);
+    list.innerHTML = items.map(i=>{
+      const dist = i.d<1000?`${Math.round(i.d)} m`:`${(i.d/1000).toFixed(1)} km`;
+      const mins = Math.max(1,Math.round(i.d*1.25/1.3/60));
+      return `<button class="ug-dest" onclick="playBeep(); startNav(${i.lat}, ${i.lng}, '${i.name.replace(/'/g,"")}')">
+        <span class="ug-ico" style="background:${i.color}26;box-shadow:inset 0 0 0 1px ${i.color}66">${i.icon}</span>
+        <span style="flex:1;min-width:0"><b style="display:block;font-size:13px;color:#fff">${i.name}</b><small style="display:block;font-size:10px;color:#a1a1aa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${i.title}</small></span>
+        <span style="text-align:right"><b style="display:block;font-size:12px;color:#fff">${hasFix?'~'+mins+' min':dist}</b><small style="font-size:10px;color:#a1a1aa">${dist}</small></span>
+      </button>`;}).join('');
+  }
+  window.ugToggleSheet = function(){ const l=$('ug-list'); const hide=l.style.display!=='none'; l.style.display=hide?'none':'flex'; $('ug-toggle').innerText=hide?'Zobrazit':'Skrýt'; };
+
+  // ===== Skutečná GPS poloha =====
+  function renderUser(lat,lng,acc){
+    currentPos = {lat,lng};
+    if(!map) return;
+    if(!userMarker){
+      userMarker = L.marker([lat,lng],{icon:L.divIcon({className:'',html:'<div class="ug-me"><b></b><i></i></div>',iconSize:[0,0]}),zIndexOffset:2000}).addTo(map).bindTooltip('Tady jsi ty');
+    } else userMarker.setLatLng([lat,lng]);
+    if(acc){ if(!accCircle) accCircle = L.circle([lat,lng],{radius:acc,color:'#3b82f6',weight:1,fillColor:'#3b82f6',fillOpacity:.12,interactive:false}).addTo(map); else { accCircle.setLatLng([lat,lng]); accCircle.setRadius(acc);} }
+    if(firstFix && hasFix){ firstFix=false; map.setView([lat,lng],17,{animate:true}); toast('📍 Našel jsem tě na mapě. Vyber, kam jdeš.'); }
+    else if(navTarget && follow && hasFix) map.panTo([lat,lng],{animate:true});
+    if(navTarget){ fetchCampusRoute(false); checkArrival(); }
+    renderList();
+  }
+  function checkArrival(){
+    if(!navTarget || !hasFix) return;
+    const d = calculateDistance(currentPos.lat,currentPos.lng,navTarget.lat,navTarget.lng);
+    if(d < 25 && !arrived){ arrived = true; $('hud-dist').innerText='🎉 Jsi v cíli!'; $('hud-info').innerText='+25 XP za dorazení'; $('navigation-hud').classList.add('ug-arrived');
+      if(currentUser){ currentUser.xp += 25; updateXPDisplay(); } toast('🎉 Dorazil jsi do cíle! +25 XP'); }
+  }
+  window.trackGPS = function(){
+    const st = $('ug-gps-status');
+    $('ug-sheet').style.display = 'block';
+    addTramStops();
+    renderUser(currentPos.lat,currentPos.lng,null);
+    if(!('geolocation' in navigator)){ st.innerText='Tvůj prohlížeč neumí zjistit polohu.'; return; }
+    if(!window.isSecureContext){ st.innerText='Poloha funguje jen na zabezpečené adrese (https).'; }
+    if(watchId!==null) navigator.geolocation.clearWatch(watchId);
+    watchId = navigator.geolocation.watchPosition(pos=>{
+      hasFix = true; const acc = Math.round(pos.coords.accuracy);
+      st.innerHTML = `<span style="color:#34d399">●</span> Poloha živě · přesnost ±${acc} m`;
+      renderUser(pos.coords.latitude,pos.coords.longitude,acc);
+    }, err=>{
+      const msg = err.code===1 ? 'Přístup k poloze je zakázaný – povol ho v nastavení prohlížeče.' : err.code===3 ? 'Hledám GPS signál…' : 'Polohu se nepodařilo zjistit.';
+      st.innerHTML = `<span style="color:#fbbf24">●</span> ${msg}`;
+      if(err.code===1) toast('📍 '+msg, 4000);
+    }, { enableHighAccuracy:true, maximumAge:3000, timeout:20000 });
+  };
+  window.centerGPS = function(){
+    follow = true;
+    if(!hasFix){ toast('Ještě nemám tvoji polohu – povol ji v prohlížeči.'); trackGPS(); return; }
+    map.setView([currentPos.lat,currentPos.lng],18,{animate:true});
+  };
+  const _startNav = window.startNav;
+  window.startNav = function(lat,lng,name){
+    arrived = false; follow = true; $('navigation-hud').classList.remove('ug-arrived');
+    if(!hasFix) toast('Polohu zatím neznám – trasa začíná u kolejí. Povol polohu pro přesnou navigaci.',3800);
+    _startNav(lat,lng,name);
+    $('ug-list').style.display='none'; $('ug-toggle').innerText='Zobrazit';
+  };
+  document.addEventListener('DOMContentLoaded',()=>{ setTimeout(()=>map && map.on('dragstart',()=>follow=false),1500); });
+
+  // ===== KVÍZ =====
+  const quizBank = {
+    easy: [
+      { q:'Co znamená zkratka VŠB?', a:['Vysoká škola báňská','Vysoká škola bankovní','Velká škola budov','Vysoké školy Brno'], c:0 },
+      { q:'Ve kterém městě sídlí VŠB-TUO?', a:['Brno','Ostrava','Olomouc','Opava'], c:1 },
+      { q:'Ve které městské části je hlavní kampus?', a:['Zábřeh','Vítkovice','Poruba','Hrabůvka'], c:2 },
+      { q:'Kterou fakultu označuje zkratka FEI?', a:['Ekonomickou','Strojní','Stavební','Elektrotechniky a informatiky'], c:3 },
+      { q:'Kde se v kampusu nejlépe najíš?', a:['V Menze','V knihovně','Na rektorátu','V aule'], c:0 },
+      { q:'Jaká tramvajová zastávka je přímo u kampusu?', a:['Hlavní nádraží','VŠB-TUO','Stodolní','Karolina'], c:1 }
+    ],
+    medium: [
+      { q:'Kolik fakult má VŠB-TUO?', a:['5','6','7','9'], c:2 },
+      { q:'Kde sídlí Fakulta bezpečnostního inženýrství?', a:['V Porubě u menzy','Ve Výškovicích','Ve Svinově','V centru'], c:1 },
+      { q:'Jak se jmenuje přestupní uzel, kam jezdí tramvaje od VŠB?', a:['Svinov mosty','Dubina','Dřevařská','Náměstí Republiky'], c:0 },
+      { q:'Co znamená zkratka TUO?', a:['Technika u Odry','Technická univerzita Ostrava','Teoretická univerzita Ostrava','Tým univerzit Ostravy'], c:1 },
+      { q:'Která fakulta se dříve jmenovala FMMI?', a:['FMT','FAST','HGF','FS'], c:0 },
+      { q:'Kde si půjčíš skripta a najdeš tichou studovnu?', a:['V Menze','Ve Sportovní hale','V Ústřední knihovně','Na kolejích'], c:2 }
+    ],
+    hard: [
+      { q:'Ve kterém roce byla založena báňská akademie, předchůdce VŠB?', a:['1716','1849','1918','1945'], c:1 },
+      { q:'Ve kterém městě byla škola založena původně?', a:['V Ostravě','V Příbrami','V Praze','Ve Vídni'], c:1 },
+      { q:'Kdy se škola přestěhovala do Ostravy?', a:['1945','1918','1961','1990'], c:0 },
+      { q:'Kterou fakultu VŠB nemá?', a:['Ekonomickou','Lékařskou','Strojní','Stavební'], c:1 },
+      { q:'Jak dlouho zhruba trvá pěšky cesta od kolejí na FEI?', a:['Do 10 minut','Asi 30 minut','Hodinu','Bez MHD to nejde'], c:0 },
+      { q:'Jaký je dobrý zvyk na tramvajové zastávce VŠB-TUO ve špičce?', a:['Nastupovat všemi dveřmi a posunout se dovnitř','Stát ve dveřích','Čekat na kolejích','Jet na střeše'], c:0 }
+    ]
+  };
+  const levelName = { easy:'Lehká úroveň', medium:'Střední úroveň', hard:'Pokročilá úroveň' };
+  const levelXp = { easy:10, medium:20, hard:35 };
+  let level='easy', qs=[], idx=0, score=0;
+
+  function shuffle(a){ return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]); }
+  window.setQuizLevel = function(l){
+    level = l;
+    ['easy','medium','hard'].forEach(k=>{ const b=$('q-btn-'+k); if(!b) return; b.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg transition ' + (k===l?'bg-brand-500 text-zinc-950':'bg-zinc-800 text-zinc-400'); });
+    initQuiz();
+  };
+  window.initQuiz = function(){ qs = shuffle(quizBank[level]).slice(0,5); idx=0; score=0; renderQ(); };
+  function renderQ(){
+    const qEl=$('quiz-question'), opts=$('quiz-options'), fb=$('quiz-feedback');
+    if(!qEl) return;
+    $('quiz-level-badge').innerText = levelName[level];
+    fb.classList.add('hidden');
+    if(idx>=qs.length){
+      const xp = score*levelXp[level];
+      $('quiz-progress-text').innerText = 'Hotovo!';
+      qEl.innerHTML = `${score===qs.length?'🏆':'🎯'} Máš ${score} z ${qs.length} správně · +${xp} XP`;
+      opts.innerHTML = `<button class="ug-opt" style="text-align:center;background:var(--brand-color);color:#fff;border:0" onclick="playBeep(); initQuiz()">Hrát znovu</button>`;
+      return;
+    }
+    const q = qs[idx];
+    $('quiz-progress-text').innerText = `Otázka ${idx+1} / ${qs.length}`;
+    qEl.innerText = q.q;
+    const order = shuffle(q.a.map((t,i)=>({t,i})));
+    opts.innerHTML = order.map(o=>`<button class="ug-opt" data-i="${o.i}">${o.t}</button>`).join('');
+    opts.querySelectorAll('button').forEach(b=>b.onclick=()=>answer(b, q));
+  }
+  function answer(btn,q){
+    const opts=$('quiz-options'), fb=$('quiz-feedback');
+    opts.querySelectorAll('button').forEach(b=>{ b.disabled=true; if(+b.dataset.i===q.c) b.classList.add('ok'); });
+    const ok = +btn.dataset.i===q.c;
+    if(!ok) btn.classList.add('bad');
+    if(ok){ score++; if(currentUser){ currentUser.xp += levelXp[level]; updateXPDisplay(); } }
+    fb.className = 'text-xs font-bold text-center mt-2 ' + (ok?'text-emerald-400':'text-rose-400');
+    fb.innerText = ok ? `Správně! +${levelXp[level]} XP` : `Vedle. Správně je: ${q.a[q.c]}`;
+    setTimeout(()=>{ idx++; renderQ(); }, 1400);
+  }
+  if(document.readyState!=='loading') initQuiz(); else document.addEventListener('DOMContentLoaded', ()=>initQuiz());
+})();
+</script>
 </body>
 </html>
