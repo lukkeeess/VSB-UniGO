@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="cs" class="dark">
+<html lang="cs">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -17,7 +17,7 @@
       theme: {
         extend: {
           colors: {
-            brand: { 500: 'var(--brand-color, #008751)', 600: 'var(--brand-dark, #00683f)' }
+            brand: { 500: 'var(--brand-color, #2563eb)', 600: 'var(--brand-dark, #1d4ed8)' }
           },
           fontFamily: { sans: ['Inter', 'sans-serif'], arcade: ['"Press Start 2P"', 'monospace'] }
         }
@@ -26,8 +26,8 @@
   </script>
   <style>
     :root {
-      --brand-color: #008751;
-      --brand-dark: #00683f;
+      --brand-color: #2563eb;
+      --brand-dark: #1d4ed8;
     }
     body { font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; width: 100vw; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; background: #030305; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -82,322 +82,338 @@
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; } }
   </style>
 </head>
-<body class="text-zinc-100 flex flex-col antialiased selection:bg-brand-500 selection:text-zinc-950">
+<body class="text-gray-900 flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
   <div id="app-wrapper" class="w-screen h-screen flex flex-col relative overflow-hidden">
 
     <!-- Celoobrazovkový Popup pro Srdíčko (+1 XP) -->
-    <div id="heart-popup-overlay" class="absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center hidden">
-      <div class="bg-zinc-900 border border-rose-500/60 p-8 rounded-3xl shadow-2xl flex flex-col items-center space-y-3 popup-animation max-w-xs mx-4 text-center">
+    <div id="heart-popup-overlay" class="absolute inset-0 z-50 bg-gray-900/30 backdrop-blur-md flex items-center justify-center hidden">
+      <div class="bg-white border border-rose-500/60 p-8 rounded-3xl shadow-lg flex flex-col items-center space-y-3 popup-animation max-w-xs mx-4 text-center">
         <div class="w-20 h-20 bg-rose-500/20 border border-rose-500/60 rounded-3xl flex items-center justify-center text-rose-500 text-4xl shadow-inner">
           <i class="fa-solid fa-heart animate-bounce"></i>
         </div>
-        <h3 class="text-xl font-black text-white">Díky za podporu!</h3>
+        <h3 class="text-xl font-black text-gray-900">Díky za podporu!</h3>
         <p class="text-sm text-brand-400 font-bold">+1 XP připsáno do profilu</p>
       </div>
     </div>
 
     <!-- Luxusní full-screen úvodní obrazovka -->
-    <div id="screen-auth" class="absolute inset-0 z-40 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black px-6 py-10 flex flex-col justify-between overflow-y-auto">
+    <div id="screen-auth" class="absolute inset-0 z-40 bg-gradient-to-b from-white to-blue-50 px-6 py-10 flex flex-col justify-between overflow-y-auto">
       <div class="my-auto space-y-8 max-w-md mx-auto w-full">
         <div class="text-center space-y-3">
-          <div class="w-24 h-24 bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-500 rounded-3xl mx-auto flex items-center justify-center text-zinc-950 text-5xl shadow-2xl shadow-emerald-500/50">
+          <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 via-teal-400 to-cyan-500 rounded-3xl mx-auto flex items-center justify-center text-gray-900 text-5xl shadow-lg shadow-blue-600/50">
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div>
-            <h1 class="text-4xl font-black tracking-tight text-white">VŠB UniGO</h1>
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mt-1">Oficiální kampusový průvodce & Arkády</p>
+            <h1 class="text-4xl font-black tracking-tight text-gray-900">VŠB UniGO</h1>
+            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mt-1">Oficiální kampusový průvodce & Arkády</p>
           </div>
         </div>
 
-        <div class="bg-zinc-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-zinc-800 space-y-5 shadow-2xl">
+        <div class="bg-white/90 backdrop-blur-2xl p-8 rounded-3xl border border-gray-100 space-y-5 shadow-lg">
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider">Vaše jméno / přezdívka</label>
-            <input type="text" id="auth-name" placeholder="např. Ing. Jan Novák" class="w-full px-5 py-4 bg-zinc-950 rounded-2xl border border-zinc-800 text-sm focus:outline-none focus:border-emerald-500 transition text-white font-semibold">
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše jméno / přezdívka</label>
+            <input type="text" id="auth-name" placeholder="např. Ing. Jan Novák" class="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-gray-100 text-sm focus:outline-none focus:border-blue-600 transition text-gray-900 font-semibold">
           </div>
           <div class="space-y-2">
-            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-wider">Vaše fakulta (oficiální brandové barvy)</label>
-            <select id="auth-faculty" class="w-full px-5 py-4 bg-zinc-950 rounded-2xl border border-zinc-800 text-sm font-black text-emerald-400 focus:outline-none cursor-pointer">
-              <option value="FEI">FEI – Fakulta elektrotechniky a informatiky (#008751)</option>
+            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše fakulta (oficiální brandové barvy)</label>
+            <select id="auth-faculty" class="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-gray-100 text-sm font-black text-blue-600 focus:outline-none cursor-pointer">
+              <option value="FEI">FEI – Fakulta elektrotechniky a informatiky (#2563eb)</option>
               <option value="FBI">FBI – Fakulta bezpečnostního inženýrství (#C8102E)</option>
               <option value="FAST">FAST – Fakulta stavební (#E2007A)</option>
               <option value="EkF">EkF – Ekonomická fakulta (#005A9C)</option>
               <option value="HGF">HGF – Hornicko-geologická fakulta (#8B5A2B)</option>
-              <option value="FMMI">FMMI – Fakulta materiálově-technologická (#F37021)</option>
+              <option value="FMT">FMT – Fakulta materiálově-technologická (#F37021)</option>
               <option value="FS">FS – Fakulta strojní (#5C2D91)</option>
             </select>
           </div>
-          <button onclick="playBeep(); handleLogin()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-zinc-950 font-black rounded-2xl shadow-xl shadow-emerald-500/30 transition-all transform active:scale-95 text-base tracking-wide">VSTOUPIT DO KAMPUSU</button>
+          <button onclick="playBeep(); handleLogin()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-600 hover:to-teal-400 text-gray-900 font-black rounded-2xl shadow-md shadow-blue-600/30 transition-all transform active:scale-95 text-base tracking-wide">VSTOUPIT DO KAMPUSU</button>
         </div>
       </div>
-      <div class="text-center text-xs text-zinc-500 font-semibold tracking-wider">VŠB-TUO • Ostrava-Poruba</div>
+      <div class="text-center text-xs text-gray-400 font-semibold tracking-wider">VŠB-TUO • Ostrava-Poruba</div>
     </div>
 
     <!-- HLAVNÍ APLIKACE -->
     <div id="screen-main" class="flex flex-col h-full w-full hidden">
       
       <!-- HORNÍ LIŠTA -->
-      <header class="px-5 py-3.5 border-b border-zinc-800/80 bg-zinc-900/95 backdrop-blur-xl flex items-center justify-between z-40 shrink-0">
+      <header class="px-5 py-3.5 border-b border-gray-100 bg-white backdrop-blur-xl flex items-center justify-between z-40 shrink-0">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-brand-500/20 border border-brand-500/40 text-brand-500 flex items-center justify-center font-bold text-base shadow-sm"><i class="fa-solid fa-compass"></i></div>
           <div>
             <p id="header-faculty" class="text-[10px] font-black text-brand-500 uppercase tracking-widest">FEI • VŠB-TUO</p>
-            <h2 id="header-username" class="text-sm font-bold text-zinc-100">Uživatel</h2>
+            <h2 id="header-username" class="text-sm font-bold text-gray-900">Uživatel</h2>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="playBeep(); switchTab('profile')" class="px-3.5 py-1.5 rounded-xl bg-zinc-800/90 border border-zinc-700/60 text-brand-500 font-black text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition">
+          <button onclick="playBeep(); switchTab('profile')" class="px-3.5 py-1.5 rounded-xl bg-gray-100/90 border border-gray-200/60 text-brand-500 font-black text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition">
             <i class="fa-solid fa-bolt text-[11px]"></i> <span id="user-xp">0</span> XP
           </button>
         </div>
       </header>
 
       <!-- OBSAH ZÁLOŽEK -->
-      <main class="flex-1 relative bg-zinc-950 w-full overflow-hidden flex flex-col">
+      <main class="flex-1 relative bg-gray-50 w-full overflow-hidden flex flex-col">
         
         <!-- ZÁLOŽKA 1: MAPA -->
         <div id="tab-map" class="tab-content absolute inset-0 w-full h-full flex flex-col">
-          <div id="leaflet-map" class="w-full h-full absolute inset-0" style="z-index: 10; background: #0c0c10;"></div>
+          <div id="leaflet-map" class="w-full h-full absolute inset-0" style="z-index: 10; background: #f3f4f6;"></div>
 
           <!-- Vyhledávání budov a učeben + lišta -->
           <div class="absolute top-3 left-3 right-3 flex flex-col gap-2 z-30 pointer-events-auto">
-            <div class="flex items-center bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 rounded-2xl px-3.5 py-2 shadow-xl">
-              <i class="fa-solid fa-search text-zinc-400 text-xs mr-2"></i>
-              <input type="text" id="building-search" oninput="filterCampusSearch(this.value)" placeholder="Hledat budovu, fakultu, učebnu (např. EP1, EA)..." class="bg-transparent text-xs text-white placeholder-zinc-500 focus:outline-none w-full font-medium">
+            <div class="flex items-center bg-white backdrop-blur-md border border-gray-100 rounded-2xl px-3.5 py-2 shadow-md">
+              <i class="fa-solid fa-search text-gray-500 text-xs mr-2"></i>
+              <input type="text" id="building-search" oninput="filterCampusSearch(this.value)" placeholder="Hledat budovu, fakultu, učebnu (např. EP1, EA)..." class="bg-transparent text-xs text-gray-900 placeholder-gray-400 focus:outline-none w-full font-medium">
             </div>
             <div id="building-chips" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-              <button onclick="playBeep(); centerBuilding('fei')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-emerald-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> FEI</button>
-              <button onclick="playBeep(); centerBuilding('fbi')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-red-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> FBI</button>
-              <button onclick="playBeep(); centerBuilding('fast')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-pink-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-helmet-safety"></i> FAST</button>
-              <button onclick="playBeep(); centerBuilding('ekf')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-blue-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-chart-line"></i> EkF</button>
-              <button onclick="playBeep(); centerBuilding('hgf')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-amber-500 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-mountain"></i> HGF</button>
-              <button onclick="playBeep(); centerBuilding('fmmi')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-orange-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-flask"></i> FMMI</button>
-              <button onclick="playBeep(); centerBuilding('fs')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-purple-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-gears"></i> FS</button>
-              <button onclick="playBeep(); centerBuilding('menza')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-amber-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-burger"></i> Menza</button>
-              <button onclick="playBeep(); centerBuilding('knihovna')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-teal-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-book"></i> Knihovna</button>
-              <button onclick="playBeep(); centerBuilding('koleje')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-purple-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-bed"></i> Koleje</button>
+              <button onclick="playBeep(); centerBuilding('fei')" class="bg-white backdrop-blur-md border border-gray-100 text-blue-600 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> FEI</button>
+              <button onclick="playBeep(); centerBuilding('fbi')" class="bg-white backdrop-blur-md border border-gray-100 text-red-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> FBI</button>
+              <button onclick="playBeep(); centerBuilding('fast')" class="bg-white backdrop-blur-md border border-gray-100 text-pink-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-helmet-safety"></i> FAST</button>
+              <button onclick="playBeep(); centerBuilding('ekf')" class="bg-white backdrop-blur-md border border-gray-100 text-blue-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-chart-line"></i> EkF</button>
+              <button onclick="playBeep(); centerBuilding('hgf')" class="bg-white backdrop-blur-md border border-gray-100 text-amber-500 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-mountain"></i> HGF</button>
+              <button onclick="playBeep(); centerBuilding('fmmi')" class="bg-white backdrop-blur-md border border-gray-100 text-orange-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-flask"></i> FMT</button>
+              <button onclick="playBeep(); centerBuilding('fs')" class="bg-white backdrop-blur-md border border-gray-100 text-purple-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-gears"></i> FS</button>
+              <button onclick="playBeep(); centerBuilding('menza')" class="bg-white backdrop-blur-md border border-gray-100 text-amber-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-burger"></i> Menza</button>
+              <button onclick="playBeep(); centerBuilding('knihovna')" class="bg-white backdrop-blur-md border border-gray-100 text-teal-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-book"></i> Knihovna</button>
+              <button onclick="playBeep(); centerBuilding('koleje')" class="bg-white backdrop-blur-md border border-gray-100 text-purple-400 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-bed"></i> Koleje</button>
             </div>
           </div>
 
           <!-- HUD Navigace (Garantovaná kampusová trasa) -->
-          <div id="navigation-hud" class="absolute top-28 left-3 right-3 bg-zinc-900/95 backdrop-blur-xl border border-brand-500/50 p-3.5 rounded-3xl shadow-2xl hidden z-30 transition-all pointer-events-auto">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="text-[10px] font-black uppercase tracking-wider text-brand-500 flex items-center gap-1"><i class="fa-solid fa-person-walking"></i> Pěší navigace</span>
-                <h3 id="hud-dest" class="text-sm font-bold text-white mt-0.5">Cíl</h3>
-              </div>
-              <button onclick="playBeep(); stopNav()" class="text-zinc-400 hover:text-white bg-zinc-800 rounded-full w-7 h-7 flex items-center justify-center transition"><i class="fa-solid fa-xmark text-xs"></i></button>
+          <div id="navigation-hud" class="absolute bottom-5 left-3 right-20 max-w-md bg-white rounded-full shadow-md border border-gray-100 pl-6 pr-2 py-2 hidden z-[32] pointer-events-auto flex items-center gap-3">
+            <button onclick="playBeep(); stopNav()" class="w-8 h-8 shrink-0 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center" title="Ukončit"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <div class="flex-1 min-w-0">
+              <h3 id="hud-dest" class="text-base font-bold text-gray-900 truncate leading-tight">Cíl</h3>
+              <p id="hud-dist" class="text-sm text-gray-500 truncate">Výpočet trasy...</p>
+              <p id="hud-info" class="hidden"></p>
             </div>
-            <div class="mt-2.5 flex items-center justify-between bg-zinc-950 p-2.5 rounded-2xl border border-zinc-800">
-              <div>
-                <p id="hud-dist" class="text-xs font-medium text-zinc-200">Výpočet trasy...</p>
-                <p id="hud-info" class="text-[10px] text-zinc-400 mt-0.5">Po chodnících a stezkách kampusu</p>
-              </div>
-              <div class="w-9 h-9 bg-brand-500/20 border border-brand-500/40 text-brand-500 rounded-xl flex items-center justify-center text-sm shadow-sm">
-                <i class="fa-solid fa-person-walking animate-pulse"></i>
-              </div>
-            </div>
+            <button onclick="playBeep(); centerGPS()" class="w-14 h-14 shrink-0 rounded-full bg-blue-600 text-white shadow-lg shadow-blue-600/30 flex items-center justify-center text-lg active:scale-95 transition" title="Sledovat trasu"><i class="fa-solid fa-arrow-right"></i></button>
           </div>
 
           <!-- GPS & Srdíčko -->
           <div class="absolute bottom-5 right-4 flex flex-col gap-3 z-30 pointer-events-auto">
-            <button onclick="playBeep(); centerGPS()" class="w-12 h-12 bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-brand-500 rounded-2xl shadow-2xl flex items-center justify-center text-lg active:scale-95 transition" title="Moje poloha">
+            <button onclick="playBeep(); centerGPS()" class="w-12 h-12 bg-white backdrop-blur-md border border-gray-100 text-brand-500 rounded-2xl shadow-lg flex items-center justify-center text-lg active:scale-95 transition" title="Moje poloha">
               <i class="fa-solid fa-location-crosshairs"></i>
             </button>
-            <button onclick="playBeep(); clickHeart()" class="w-14 h-14 bg-rose-500 text-white rounded-2xl shadow-2xl shadow-rose-500/40 flex items-center justify-center text-xl heart-pulsing transition active:scale-95" title="Dát srdíčko (+1 XP)">
+            <button onclick="playBeep(); clickHeart()" class="w-14 h-14 bg-rose-500 text-white rounded-2xl shadow-lg shadow-rose-500/40 flex items-center justify-center text-xl transition active:scale-95" title="Dát srdíčko (+1 XP)">
               <i class="fa-solid fa-heart"></i>
             </button>
           </div>
         </div>
 
         <!-- ZÁLOŽKA 2: QUESTY & KVÍZ -->
-        <div id="tab-quests" class="tab-content absolute inset-0 p-4 hidden bg-zinc-950 overflow-y-auto space-y-4">
-          <div class="bg-gradient-to-br from-zinc-900 to-zinc-900/60 border border-zinc-800 p-5 rounded-3xl shadow-xl">
+        <div id="tab-quests" class="tab-content absolute inset-0 p-4 hidden bg-gray-50 overflow-y-auto space-y-4">
+          <div class="bg-gradient-to-br from-zinc-900 to-zinc-900/60 border border-gray-100 p-5 rounded-3xl shadow-md">
             <p class="text-xs uppercase tracking-wider text-brand-500 font-bold">Kampusový Pokrok</p>
             <div class="flex justify-between items-end mt-1">
-              <h2 id="quest-xp" class="text-2xl font-black tracking-tight text-white">0 XP</h2>
+              <h2 id="quest-xp" class="text-2xl font-black tracking-tight text-gray-900">0 XP</h2>
               <span class="bg-brand-500/15 text-brand-400 border border-brand-500/30 text-xs font-bold px-3 py-1 rounded-full">Inženýrský start</span>
             </div>
-            <div class="w-full bg-zinc-800 h-2.5 rounded-full overflow-hidden mt-3.5">
+            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden mt-3.5">
               <div id="quest-bar" class="bg-gradient-to-r from-brand-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
             </div>
           </div>
 
           <!-- Kvíz -->
-          <div class="bg-zinc-900/90 border border-zinc-800 p-5 rounded-3xl shadow-xl space-y-4">
+          <div class="bg-white/90 border border-gray-100 p-5 rounded-3xl shadow-md space-y-4">
             <div class="flex items-center justify-between">
               <div>
                 <span class="text-[10px] uppercase font-black tracking-wider text-brand-500"><i class="fa-solid fa-brain"></i> Vědomostní výzva</span>
-                <h3 class="text-base font-bold text-white">Poznej VŠB</h3>
+                <h3 class="text-base font-bold text-gray-900">Poznej VŠB</h3>
               </div>
               <div class="flex gap-1.5">
-                <button onclick="playBeep(); setQuizLevel('easy')" id="q-btn-easy" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brand-500 text-zinc-950 transition">Lehké</button>
-                <button onclick="playBeep(); setQuizLevel('medium')" id="q-btn-medium" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-zinc-800 text-zinc-400 transition">Střední</button>
-                <button onclick="playBeep(); setQuizLevel('hard')" id="q-btn-hard" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-zinc-800 text-zinc-400 transition">Pokročilé</button>
+                <button onclick="playBeep(); setQuizLevel('easy')" id="q-btn-easy" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brand-500 text-white transition">Lehké</button>
+                <button onclick="playBeep(); setQuizLevel('medium')" id="q-btn-medium" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-gray-100 text-gray-500 transition">Střední</button>
+                <button onclick="playBeep(); setQuizLevel('hard')" id="q-btn-hard" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-gray-100 text-gray-500 transition">Pokročilé</button>
               </div>
             </div>
 
-            <div id="quiz-card" class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 space-y-3">
-              <div class="flex justify-between text-xs text-zinc-400 font-semibold">
+            <div id="quiz-card" class="bg-gray-50 p-4 rounded-2xl border border-gray-100 space-y-3">
+              <div class="flex justify-between text-xs text-gray-500 font-semibold">
                 <span id="quiz-progress-text">Otázka 1 / 5</span>
                 <span id="quiz-level-badge" class="text-brand-400 font-bold uppercase">Lehká úroveň</span>
               </div>
-              <p id="quiz-question" class="text-sm font-bold text-zinc-200">Načítám otázku...</p>
+              <p id="quiz-question" class="text-sm font-bold text-gray-800">Načítám otázku...</p>
               <div id="quiz-options" class="grid grid-cols-1 gap-2"></div>
               <p id="quiz-feedback" class="text-xs font-bold text-center mt-2 hidden"></p>
             </div>
           </div>
 
-          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 px-1 pt-1">Navigační Questy kampusu</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 px-1 pt-1">Navigační Questy kampusu</h3>
           
           <div class="space-y-3">
-            <div id="quest-item-faculty" class="p-4 bg-zinc-900/80 border border-zinc-800 rounded-3xl flex items-center justify-between shadow-sm">
+            <div id="quest-item-faculty" class="p-4 bg-white border border-gray-100 rounded-3xl flex items-center justify-between shadow-sm">
               <div class="space-y-0.5">
-                <h4 id="faculty-quest-title" class="text-sm font-bold text-zinc-100">🏛️ Návštěva tvé fakulty</h4>
-                <p class="text-xs text-zinc-400">Zobrazit trasu (+150 XP)</p>
+                <h4 id="faculty-quest-title" class="text-sm font-bold text-gray-900">🏛️ Návštěva tvé fakulty</h4>
+                <p class="text-xs text-gray-500">Zobrazit trasu (+150 XP)</p>
               </div>
-              <button id="faculty-quest-btn" onclick="playBeep(); startFacultyQuest()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-zinc-950 font-black text-xs rounded-2xl shadow-md transition">Splnit</button>
+              <button id="faculty-quest-btn" onclick="playBeep(); startFacultyQuest()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white font-black text-xs rounded-2xl shadow-md transition">Splnit</button>
             </div>
 
-            <div id="quest-item-knihovna" class="p-4 bg-zinc-900/80 border border-zinc-800 rounded-3xl flex items-center justify-between shadow-sm">
+            <div id="quest-item-knihovna" class="p-4 bg-white border border-gray-100 rounded-3xl flex items-center justify-between shadow-sm">
               <div class="space-y-0.5">
-                <h4 class="text-sm font-bold text-zinc-100">📚 Cesta za věděním</h4>
-                <p id="quest-desc-knihovna" class="text-xs text-zinc-400">Zobrazit trasu do knihovny (+120 XP)</p>
+                <h4 class="text-sm font-bold text-gray-900">📚 Cesta za věděním</h4>
+                <p id="quest-desc-knihovna" class="text-xs text-gray-500">Zobrazit trasu do knihovny (+120 XP)</p>
               </div>
-              <button id="btn-claim-lib" onclick="playBeep(); startNavQuest('knihovna', 120, 'quest-item-knihovna', 'quest-desc-knihovna', 'btn-claim-lib')" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-zinc-950 font-black text-xs rounded-2xl shadow-md transition">Splnit</button>
+              <button id="btn-claim-lib" onclick="playBeep(); startNavQuest('knihovna', 120, 'quest-item-knihovna', 'quest-desc-knihovna', 'btn-claim-lib')" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-white font-black text-xs rounded-2xl shadow-md transition">Splnit</button>
             </div>
           </div>
         </div>
 
         <!-- ZÁLOŽKA 3: ARKÁDOVÉ HRY -->
-        <div id="tab-game" class="tab-content absolute inset-0 p-4 hidden bg-zinc-950 overflow-y-auto space-y-4">
+        <div id="tab-game" class="tab-content absolute inset-0 p-4 hidden bg-gray-50 overflow-y-auto space-y-4">
           <div class="text-center pt-2">
-            <h2 class="text-2xl font-black tracking-tight text-white flex items-center justify-center gap-2 font-arcade text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">VŠB ARKÁDY</h2>
-            <p class="text-xs text-zinc-400 mt-1 font-semibold tracking-wider">ŽIVÉ NEONOVÉ HRY PRO INŽENÝRY</p>
+            <h2 class="text-2xl font-black tracking-tight text-gray-900 flex items-center justify-center gap-2 font-arcade text-blue-600 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">VŠB ARKÁDY</h2>
+            <p class="text-xs text-gray-500 mt-1 font-semibold tracking-wider">ŽIVÉ NEONOVÉ HRY PRO INŽENÝRY</p>
           </div>
 
-          <div class="flex bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800 max-w-sm mx-auto w-full overflow-x-auto no-scrollbar shadow-inner">
-            <button onclick="playBeep(); switchGame('snake')" id="btn-game-snake" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-zinc-950 transition whitespace-nowrap shadow-sm">Had</button>
-            <button onclick="playBeep(); switchGame('tetris')" id="btn-game-tetris" class="px-3.5 py-2 text-xs font-bold rounded-xl text-zinc-400 transition whitespace-nowrap">Tetris</button>
-            <button onclick="playBeep(); switchGame('pexeso')" id="btn-game-pexeso" class="px-3.5 py-2 text-xs font-bold rounded-xl text-zinc-400 transition whitespace-nowrap">Pexeso</button>
-            <button onclick="playBeep(); switchGame('breakout')" id="btn-game-breakout" class="px-3.5 py-2 text-xs font-bold rounded-xl text-zinc-400 transition whitespace-nowrap">Breakout</button>
-            <button onclick="playBeep(); switchGame('rocket')" id="btn-game-rocket" class="px-3.5 py-2 text-xs font-bold rounded-xl text-zinc-400 transition whitespace-nowrap">Raketka</button>
+          <div class="flex bg-white p-1.5 rounded-2xl border border-gray-100 max-w-sm mx-auto w-full overflow-x-auto no-scrollbar shadow-inner">
+            <button onclick="playBeep(); switchGame('snake')" id="btn-game-snake" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white transition whitespace-nowrap shadow-sm">Had</button>
+            <button onclick="playBeep(); switchGame('tetris')" id="btn-game-tetris" class="px-3.5 py-2 text-xs font-bold rounded-xl text-gray-500 transition whitespace-nowrap">Tetris</button>
+            <button onclick="playBeep(); switchGame('pexeso')" id="btn-game-pexeso" class="px-3.5 py-2 text-xs font-bold rounded-xl text-gray-500 transition whitespace-nowrap">Pexeso</button>
+            <button onclick="playBeep(); switchGame('breakout')" id="btn-game-breakout" class="px-3.5 py-2 text-xs font-bold rounded-xl text-gray-500 transition whitespace-nowrap">Breakout</button>
+            <button onclick="playBeep(); switchGame('rocket')" id="btn-game-rocket" class="px-3.5 py-2 text-xs font-bold rounded-xl text-gray-500 transition whitespace-nowrap">Raketka</button>
           </div>
 
           <!-- 1. HAD -->
           <div id="game-container-snake" class="game-box flex flex-col items-center space-y-3">
-            <div class="flex gap-4 bg-zinc-900/90 px-5 py-2 rounded-2xl border border-emerald-500/40 text-xs font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-              <span>Skóre: <span id="snake-score" class="text-emerald-400 font-black">0</span></span>
+            <div class="flex gap-4 bg-white/90 px-5 py-2 rounded-2xl border border-blue-600/40 text-xs font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <span>Skóre: <span id="snake-score" class="text-blue-600 font-black">0</span></span>
               <span>•</span>
               <span>High: <span id="snake-highscore" class="text-amber-400 font-black">0</span></span>
             </div>
-            <div class="arcade-cabinet rounded-3xl p-3 border-emerald-500/50 shadow-[0_0_35px_rgba(16,185,129,0.3)] crt-screen">
-              <canvas id="snakeCanvas" width="280" height="280" class="rounded-2xl bg-black block border border-emerald-500/40"></canvas>
+            <div class="arcade-cabinet rounded-3xl p-3 border-blue-600/50 shadow-[0_0_35px_rgba(16,185,129,0.3)]">
+              <canvas id="snakeCanvas" width="280" height="280" class="rounded-2xl bg-black block border border-blue-600/40"></canvas>
             </div>
             <div class="grid grid-cols-3 gap-2 w-full max-w-[220px]">
               <div></div>
-              <button onclick="playBeep(); changeSnakeDir('UP')" class="p-3 bg-zinc-900 border border-emerald-500/40 text-emerald-400 rounded-xl active:bg-emerald-500 active:text-zinc-950 transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-up"></i></button>
+              <button onclick="playBeep(); changeSnakeDir('UP')" class="p-3 bg-white border border-blue-600/40 text-blue-600 rounded-xl active:bg-blue-600 active:text-white transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-up"></i></button>
               <div></div>
-              <button onclick="playBeep(); changeSnakeDir('LEFT')" class="p-3 bg-zinc-900 border border-emerald-500/40 text-emerald-400 rounded-xl active:bg-emerald-500 active:text-zinc-950 transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-left"></i></button>
-              <button onclick="playBeep(); changeSnakeDir('DOWN')" class="p-3 bg-zinc-900 border border-emerald-500/40 text-emerald-400 rounded-xl active:bg-emerald-500 active:text-zinc-950 transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-down"></i></button>
-              <button onclick="playBeep(); changeSnakeDir('RIGHT')" class="p-3 bg-zinc-900 border border-emerald-500/40 text-emerald-400 rounded-xl active:bg-emerald-500 active:text-zinc-950 transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-right"></i></button>
+              <button onclick="playBeep(); changeSnakeDir('LEFT')" class="p-3 bg-white border border-blue-600/40 text-blue-600 rounded-xl active:bg-blue-600 active:text-white transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-left"></i></button>
+              <button onclick="playBeep(); changeSnakeDir('DOWN')" class="p-3 bg-white border border-blue-600/40 text-blue-600 rounded-xl active:bg-blue-600 active:text-white transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-down"></i></button>
+              <button onclick="playBeep(); changeSnakeDir('RIGHT')" class="p-3 bg-white border border-blue-600/40 text-blue-600 rounded-xl active:bg-blue-600 active:text-white transition font-black text-lg shadow-md"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
-            <button onclick="playBeep(); startSnakeGame()" id="snake-start-btn" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-xs rounded-xl shadow-lg shadow-emerald-500/40 transition">START HADA</button>
+            <button onclick="playBeep(); startSnakeGame()" id="snake-start-btn" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-600 text-white font-black text-xs rounded-xl shadow-lg shadow-blue-600/40 transition">START HADA</button>
           </div>
 
           <!-- 2. TETRIS -->
           <div id="game-container-tetris" class="game-box flex flex-col items-center space-y-3 hidden">
-            <div class="flex gap-4 bg-zinc-900/90 px-5 py-2 rounded-2xl border border-cyan-500/40 text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+            <div class="flex gap-4 bg-white/90 px-5 py-2 rounded-2xl border border-cyan-500/40 text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)]">
               <span>Skóre: <span id="tetris-score" class="text-cyan-400 font-black">0</span></span>
             </div>
-            <div class="arcade-cabinet rounded-3xl p-3 border-cyan-500/50 shadow-[0_0_35px_rgba(6,182,212,0.3)] crt-screen">
+            <div class="arcade-cabinet rounded-3xl p-3 border-cyan-500/50 shadow-[0_0_35px_rgba(6,182,212,0.3)]">
               <canvas id="tetrisCanvas" width="200" height="300" class="rounded-2xl bg-black block border border-cyan-500/40"></canvas>
             </div>
             <div class="flex gap-2 w-full max-w-[240px]">
-              <button onclick="playBeep(); tetrisMove(-1)" class="flex-1 py-3 bg-zinc-900 border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-zinc-950 font-black text-xs shadow-md">◄ VLEVO</button>
-              <button onclick="playBeep(); tetrisRotate()" class="flex-1 py-3 bg-zinc-900 border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-zinc-950 font-black text-xs shadow-md">↻ OTOČIT</button>
-              <button onclick="playBeep(); tetrisMove(1)" class="flex-1 py-3 bg-zinc-900 border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-zinc-950 font-black text-xs shadow-md">VPRAVO ►</button>
+              <button onclick="playBeep(); tetrisMove(-1)" class="flex-1 py-3 bg-white border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-white font-black text-xs shadow-md">◄ VLEVO</button>
+              <button onclick="playBeep(); tetrisRotate()" class="flex-1 py-3 bg-white border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-white font-black text-xs shadow-md">↻ OTOČIT</button>
+              <button onclick="playBeep(); tetrisMove(1)" class="flex-1 py-3 bg-white border border-cyan-500/40 text-cyan-400 rounded-xl active:bg-cyan-500 active:text-white font-black text-xs shadow-md">VPRAVO ►</button>
             </div>
-            <button onclick="playBeep(); startTetrisGame()" id="tetris-start-btn" class="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-black text-xs rounded-xl shadow-lg shadow-cyan-500/40 transition">START TETRISU</button>
+            <button onclick="playBeep(); startTetrisGame()" id="tetris-start-btn" class="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-white font-black text-xs rounded-xl shadow-lg shadow-cyan-500/40 transition">START TETRISU</button>
           </div>
 
           <!-- 3. PEXESO -->
           <div id="game-container-pexeso" class="game-box flex flex-col items-center space-y-3 hidden">
-            <div class="flex gap-4 bg-zinc-900/90 px-5 py-2 rounded-2xl border border-pink-500/40 text-xs font-bold shadow-[0_0_15px_rgba(236,72,153,0.3)]">
+            <div class="flex gap-4 bg-white/90 px-5 py-2 rounded-2xl border border-pink-500/40 text-xs font-bold shadow-[0_0_15px_rgba(236,72,153,0.3)]">
               <span>Nalezené páry: <span id="pexeso-matches" class="text-pink-400 font-black">0</span> / 4</span>
             </div>
             <div class="arcade-cabinet rounded-3xl p-4 border-pink-500/50 shadow-[0_0_35px_rgba(236,72,153,0.3)]">
               <div id="pexeso-grid" class="grid grid-cols-4 gap-2.5 w-[260px] h-[260px]"></div>
             </div>
-            <button onclick="playBeep(); startPexesoGame()" class="px-6 py-2.5 bg-pink-500 hover:bg-pink-400 text-zinc-950 font-black text-xs rounded-xl shadow-lg shadow-pink-500/40 transition mt-2">NOVÉ PEXESO</button>
+            <button onclick="playBeep(); startPexesoGame()" class="px-6 py-2.5 bg-pink-500 hover:bg-pink-400 text-white font-black text-xs rounded-xl shadow-lg shadow-pink-500/40 transition mt-2">NOVÉ PEXESO</button>
           </div>
 
           <!-- 4. BREAKOUT -->
           <div id="game-container-breakout" class="game-box flex flex-col items-center space-y-3 hidden">
-            <div class="flex gap-4 bg-zinc-900/90 px-5 py-2 rounded-2xl border border-amber-500/40 text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+            <div class="flex gap-4 bg-white/90 px-5 py-2 rounded-2xl border border-amber-500/40 text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)]">
               <span>Skóre: <span id="breakout-score" class="text-amber-400 font-black">0</span></span>
             </div>
-            <div class="arcade-cabinet rounded-3xl p-3 border-amber-500/50 shadow-[0_0_35px_rgba(245,158,11,0.3)] crt-screen">
+            <div class="arcade-cabinet rounded-3xl p-3 border-amber-500/50 shadow-[0_0_35px_rgba(245,158,11,0.3)]">
               <canvas id="breakoutCanvas" width="280" height="280" class="rounded-2xl bg-black block border border-amber-500/40"></canvas>
             </div>
             <div class="flex gap-3 w-full max-w-[240px]">
-              <button ontouchstart="breakoutMove(-1)" onmousedown="breakoutMove(-1)" class="flex-1 py-3 bg-zinc-900 border border-amber-500/40 text-amber-400 rounded-xl active:bg-amber-500 active:text-zinc-950 font-black text-xs shadow-md">◄ VLEVO</button>
-              <button ontouchstart="breakoutMove(1)" onmousedown="breakoutMove(1)" class="flex-1 py-3 bg-zinc-900 border border-amber-500/40 text-amber-400 rounded-xl active:bg-amber-500 active:text-zinc-950 font-black text-xs shadow-md">VPRAVO ►</button>
+              <button ontouchstart="breakoutMove(-1)" onmousedown="breakoutMove(-1)" class="flex-1 py-3 bg-white border border-amber-500/40 text-amber-400 rounded-xl active:bg-amber-500 active:text-white font-black text-xs shadow-md">◄ VLEVO</button>
+              <button ontouchstart="breakoutMove(1)" onmousedown="breakoutMove(1)" class="flex-1 py-3 bg-white border border-amber-500/40 text-amber-400 rounded-xl active:bg-amber-500 active:text-white font-black text-xs shadow-md">VPRAVO ►</button>
             </div>
-            <button onclick="playBeep(); startBreakoutGame()" id="breakout-start-btn" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black text-xs rounded-xl shadow-lg shadow-amber-500/40 transition">START BREAKOUTU</button>
+            <button onclick="playBeep(); startBreakoutGame()" id="breakout-start-btn" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-white font-black text-xs rounded-xl shadow-lg shadow-amber-500/40 transition">START BREAKOUTU</button>
           </div>
 
           <!-- 5. RAKETKA -->
           <div id="game-container-rocket" class="game-box flex flex-col items-center space-y-3 hidden">
-            <div class="flex gap-4 bg-zinc-900/90 px-5 py-2 rounded-2xl border border-rose-500/40 text-xs font-bold shadow-[0_0_15px_rgba(244,63,94,0.3)]">
+            <div class="flex gap-4 bg-white/90 px-5 py-2 rounded-2xl border border-rose-500/40 text-xs font-bold shadow-[0_0_15px_rgba(244,63,94,0.3)]">
               <span>Zásahy: <span id="rocket-score" class="text-rose-400 font-black">0</span></span>
             </div>
-            <div class="arcade-cabinet rounded-3xl p-3 border-rose-500/50 shadow-[0_0_35px_rgba(244,63,94,0.3)] crt-screen">
+            <div class="arcade-cabinet rounded-3xl p-3 border-rose-500/50 shadow-[0_0_35px_rgba(244,63,94,0.3)]">
               <canvas id="rocketCanvas" width="280" height="280" class="rounded-2xl bg-black block border border-rose-500/40"></canvas>
             </div>
             <div class="flex gap-2 w-full max-w-[240px]">
-              <button onclick="playBeep(); rocketMove(-15)" class="flex-1 py-3 bg-zinc-900 border border-rose-500/40 text-rose-400 rounded-xl active:bg-rose-500 active:text-white font-black text-xs shadow-md">◄ UHNOUT</button>
-              <button onclick="playBeep(); rocketShoot()" class="flex-1 py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-white rounded-xl active:scale-95 font-black text-xs shadow-lg">⚡ PAL!</button>
-              <button onclick="playBeep(); rocketMove(15)" class="flex-1 py-3 bg-zinc-900 border border-rose-500/40 text-rose-400 rounded-xl active:bg-rose-500 active:text-white font-black text-xs shadow-md">UHNOUT ►</button>
+              <button onclick="playBeep(); rocketMove(-15)" class="flex-1 py-3 bg-white border border-rose-500/40 text-rose-400 rounded-xl active:bg-rose-500 active:text-white font-black text-xs shadow-md">◄ UHNOUT</button>
+              <button onclick="playBeep(); rocketShoot()" class="flex-1 py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-gray-900 rounded-xl active:scale-95 font-black text-xs shadow-lg">⚡ PAL!</button>
+              <button onclick="playBeep(); rocketMove(15)" class="flex-1 py-3 bg-white border border-rose-500/40 text-rose-400 rounded-xl active:bg-rose-500 active:text-white font-black text-xs shadow-md">UHNOUT ►</button>
             </div>
             <button onclick="playBeep(); startRocketGame()" id="rocket-start-btn" class="px-6 py-2.5 bg-rose-500 hover:bg-rose-400 text-white font-black text-xs rounded-xl shadow-lg shadow-rose-500/40 transition">START RAKETKY</button>
           </div>
         </div>
 
         <!-- ZÁLOŽKA 4: PROFIL -->
-        <div id="tab-profile" class="tab-content absolute inset-0 p-4 hidden bg-zinc-950 overflow-y-auto space-y-4">
+        <div id="tab-sluzby" class="tab-content absolute inset-0 p-4 hidden bg-gray-50 overflow-y-auto space-y-4">
+          <h2 class="text-2xl font-bold text-gray-900 px-1 pt-1">Služby</h2>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-utensils"></i></div>
+              <div><h3 class="text-base font-bold text-gray-900">Menza</h3><p class="text-xs text-gray-500">Dnešní menu</p></div>
+            </div>
+            <div id="sluzby-menu" class="divide-y divide-gray-100">
+              <div class="flex justify-between py-2.5"><span class="text-xs text-gray-500">Polévka</span><span class="text-sm font-semibold text-gray-900 text-right">Vývar s nudlemi</span></div>
+              <div class="flex justify-between py-2.5"><span class="text-xs text-gray-500">Menu 1</span><span class="text-sm font-semibold text-gray-900 text-right">Smažený sýr, hranolky, tatarka</span></div>
+              <div class="flex justify-between py-2.5"><span class="text-xs text-gray-500">Menu 2</span><span class="text-sm font-semibold text-gray-900 text-right">Kuřecí plátek, rýže</span></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-train-tram"></i></div>
+              <div><h3 class="text-base font-bold text-gray-900">Spoje</h3><p class="text-xs text-gray-500">Zastávka VŠB-TUO</p></div>
+            </div>
+            <div class="divide-y divide-gray-100">
+              <div class="flex items-center justify-between py-3"><span class="text-sm font-semibold text-gray-900">Směr Svinov mosty</span><span class="text-2xl font-bold text-blue-600">2 min <span class="text-sm text-gray-400 font-semibold">12 min</span></span></div>
+              <div class="flex items-center justify-between py-3"><span class="text-sm font-semibold text-gray-900">Směr Poruba</span><span class="text-2xl font-bold text-blue-600">5 min <span class="text-sm text-gray-400 font-semibold">15 min</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-profile" class="tab-content absolute inset-0 p-4 hidden bg-gray-50 overflow-y-auto space-y-4">
           <div class="px-1">
-            <h2 class="text-xl font-bold tracking-tight text-white">Můj Profil</h2>
-            <p class="text-xs text-zinc-400">Osobní statistiky a nastavení fakulty</p>
+            <h2 class="text-xl font-bold tracking-tight text-gray-900">Můj Profil</h2>
+            <p class="text-xs text-gray-500">Osobní statistiky a nastavení fakulty</p>
           </div>
 
-          <div class="p-5 bg-zinc-900/90 border border-zinc-800 rounded-3xl flex items-center gap-4 shadow-sm">
+          <div class="p-5 bg-white/90 border border-gray-100 rounded-3xl flex items-center gap-4 shadow-sm">
             <div class="w-16 h-16 bg-brand-500/20 border border-brand-500/40 text-brand-500 rounded-2xl flex items-center justify-center text-2xl font-black shadow-inner">
               <i class="fa-solid fa-user-graduate"></i>
             </div>
             <div class="overflow-hidden">
-              <h3 id="profile-name" class="text-base font-bold text-white truncate">Uživatel</h3>
+              <h3 id="profile-name" class="text-base font-bold text-gray-900 truncate">Uživatel</h3>
               <p id="profile-faculty" class="inline-block mt-1.5 px-3 py-0.5 bg-brand-500/20 border border-brand-500/40 text-brand-400 text-[10px] font-black rounded-full">FEI • VŠB-TUO</p>
             </div>
           </div>
 
-          <div class="p-5 bg-zinc-900/90 border border-zinc-800 rounded-3xl space-y-3 shadow-sm">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Změnit barvu podle fakulty (přesný vizuál)</h4>
-            <select id="profile-faculty-select" onchange="changeAppFaculty(this.value)" class="w-full px-4 py-3.5 bg-zinc-950 rounded-2xl border border-zinc-800 text-sm font-black text-brand-400 focus:outline-none cursor-pointer">
-              <option value="FEI">FEI – Fakulta elektrotechniky a informatiky (#008751)</option>
+          <div class="p-5 bg-white/90 border border-gray-100 rounded-3xl space-y-3 shadow-sm">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-600">Změnit barvu podle fakulty (přesný vizuál)</h4>
+            <select id="profile-faculty-select" onchange="changeAppFaculty(this.value)" class="w-full px-4 py-3.5 bg-gray-50 rounded-2xl border border-gray-100 text-sm font-black text-brand-400 focus:outline-none cursor-pointer">
+              <option value="FEI">FEI – Fakulta elektrotechniky a informatiky (#2563eb)</option>
               <option value="FBI">FBI – Fakulta bezpečnostního inženýrství (#C8102E)</option>
               <option value="FAST">FAST – Fakulta stavební (#E2007A)</option>
               <option value="EkF">EkF – Ekonomická fakulta (#005A9C)</option>
               <option value="HGF">HGF – Hornicko-geologická fakulta (#8B5A2B)</option>
-              <option value="FMMI">FMMI – Fakulta materiálově-technologická (#F37021)</option>
+              <option value="FMT">FMT – Fakulta materiálově-technologická (#F37021)</option>
               <option value="FS">FS – Fakulta strojní (#5C2D91)</option>
             </select>
-            <p class="text-[11px] text-zinc-400">Okamžitě přebarví celou aplikaci včetně tlačítek a mapy.</p>
+            <p class="text-[11px] text-gray-500">Okamžitě přebarví celou aplikaci včetně tlačítek a mapy.</p>
           </div>
 
           <div class="grid grid-cols-1 gap-3">
-            <div class="p-4 bg-zinc-900/80 border border-zinc-800 rounded-3xl text-center space-y-1">
-              <span class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Celkově získané XP</span>
+            <div class="p-4 bg-white border border-gray-100 rounded-3xl text-center space-y-1">
+              <span class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Celkově získané XP</span>
               <h4 id="profile-xp" class="text-2xl font-black text-brand-400">0 XP</h4>
             </div>
           </div>
@@ -410,11 +426,12 @@
       </main>
 
       <!-- SPODNÍ NAVIGACE -->
-      <nav class="bg-zinc-900/95 border-t border-zinc-800/80 backdrop-blur-xl px-6 py-2.5 flex justify-between items-center z-40 shrink-0">
+      <nav class="bg-white border-t border-gray-100 backdrop-blur-xl px-6 py-2.5 flex justify-between items-center z-40 shrink-0">
         <button onclick="playBeep(); switchTab('map')" id="nav-btn-map" class="flex flex-col items-center text-brand-500 transition gap-0.5"><i class="fa-solid fa-map text-base"></i><span class="text-[10px] font-medium">Mapa</span></button>
-        <button onclick="playBeep(); switchTab('quests')" id="nav-btn-quests" class="flex flex-col items-center text-zinc-400 hover:text-zinc-200 transition gap-0.5"><i class="fa-solid fa-trophy text-base"></i><span class="text-[10px] font-medium">Questy</span></button>
-        <button onclick="playBeep(); switchTab('game')" id="nav-btn-game" class="flex flex-col items-center text-zinc-400 hover:text-zinc-200 transition gap-0.5"><i class="fa-solid fa-gamepad text-base"></i><span class="text-[10px] font-medium">Hry</span></button>
-        <button onclick="playBeep(); switchTab('profile')" id="nav-btn-profile" class="flex flex-col items-center text-zinc-400 hover:text-zinc-200 transition gap-0.5"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-medium">Profil</span></button>
+        <button onclick="playBeep(); switchTab('quests')" id="nav-btn-quests" class="flex flex-col items-center text-gray-500 hover:text-gray-800 transition gap-0.5"><i class="fa-solid fa-trophy text-base"></i><span class="text-[10px] font-medium">Questy</span></button>
+        <button onclick="playBeep(); switchTab('game')" id="nav-btn-game" class="flex flex-col items-center text-gray-500 hover:text-gray-800 transition gap-0.5"><i class="fa-solid fa-gamepad text-base"></i><span class="text-[10px] font-medium">Hry</span></button>
+        <button onclick="playBeep(); switchTab('sluzby')" id="nav-btn-sluzby" class="flex flex-col items-center text-gray-500 hover:text-gray-800 transition gap-0.5"><i class="fa-solid fa-store text-base"></i><span class="text-[10px] font-medium">Služby</span></button>
+        <button onclick="playBeep(); switchTab('profile')" id="nav-btn-profile" class="flex flex-col items-center text-gray-500 hover:text-gray-800 transition gap-0.5"><i class="fa-solid fa-user text-base"></i><span class="text-[10px] font-medium">Profil</span></button>
       </nav>
     </div>
 
@@ -451,12 +468,12 @@
 
     // Oficiální brandové barvy fakult VŠB-TUO
     const facultyColors = {
-      'FEI': { primary: '#008751', dark: '#00683f' },
+      'FEI': { primary: '#2563eb', dark: '#1d4ed8' },
       'FBI': { primary: '#C8102E', dark: '#9b0c23' },
       'FAST': { primary: '#E2007A', dark: '#b50061' },
       'EkF': { primary: '#005A9C', dark: '#004275' },
       'HGF': { primary: '#8B5A2B', dark: '#694320' },
-      'FMMI': { primary: '#F37021', dark: '#c25514' },
+      'FMT': { primary: '#F37021', dark: '#c25514' },
       'FS': { primary: '#5C2D91', dark: '#44216c' }
     };
 
@@ -542,7 +559,7 @@
       
       // Po-Pá: 10:45 (645 min) až 14:30 (870 min)
       if (timeVal >= 645 && timeVal <= 870) {
-        return `<span class="text-emerald-400 font-bold animate-pulse">● Otevřeno (Výdej do 14:15)</span>`;
+        return `<span class="text-blue-600 font-bold animate-pulse">● Otevřeno (Výdej do 14:15)</span>`;
       } else {
         return `<span class="text-rose-400 font-bold">● Mimo provozní dobu (Otevírá v 10:45)</span>`;
       }
@@ -550,7 +567,7 @@
 
     // Databáze budov a učeben VŠB
     const vsbBuildings = [
-      { id: 'fei', name: 'FEI', title: 'Fakulta elektrotechniky a informatiky', lat: 49.83108, lng: 18.16084, color: '#008751', icon: '⚡',
+      { id: 'fei', name: 'FEI', title: 'Fakulta elektrotechniky a informatiky', lat: 49.83108, lng: 18.16084, color: '#2563eb', icon: '⚡',
         floors: "<b>Přízemí:</b> Vrátnice, bufet.<br><b>Učebny:</b> EP1, EP2, EA, EB123.<br><b>Otevřeno:</b> Po-Pá 6:00 - 22:00" },
       { id: 'fbi', name: 'FBI', title: 'Fakulta bezpečnostního inženýrství', lat: 49.7775589, lng: 18.2187819, color: '#C8102E', icon: '🛡️',
         floors: "<b>Přízemí:</b> Aula FBI, studijní.<br><b>Učebny:</b> FBI-101, FBI-205.<br><b>Otevřeno:</b> Po-Pá 7:00 - 20:00" },
@@ -560,12 +577,12 @@
         floors: "<b>Přízemí:</b> Auly.<br><b>Učebny:</b> NA1, NA2, NB1.<br><b>Otevřeno:</b> Po-Pá 7:00 - 21:00" },
       { id: 'hgf', name: 'HGF', title: 'Hornicko-geologická fakulta', lat: 49.82940, lng: 18.16020, color: '#8B5A2B', icon: '⛏️',
         floors: "<b>Přízemí:</b> Geologické muzeum.<br><b>Učebny:</b> H-102, H-204.<br><b>Otevřeno:</b> Po-Pá 7:00 - 20:00" },
-      { id: 'fmmi', name: 'FMMI', title: 'Fakulta materiálově-technologická', lat: 49.83090, lng: 18.15930, color: '#F37021', icon: '🧪',
+      { id: 'fmmi', name: 'FMT', title: 'Fakulta materiálově-technologická', lat: 49.83090, lng: 18.15930, color: '#F37021', icon: '🧪',
         floors: "<b>Přízemí:</b> Hutní laboratoře.<br><b>Učebny:</b> L-1, L-2.<br><b>Otevřeno:</b> Po-Pá 7:00 - 20:00" },
       { id: 'fs', name: 'FS', title: 'Fakulta strojní', lat: 49.83368, lng: 18.16360, color: '#5C2D91', icon: '⚙️',
         floors: "<b>Přízemí:</b> Protolab - 3D tisk.<br><b>Učebny:</b> M-101, M-305.<br><b>Otevřeno:</b> Po-Pá 6:30 - 21:30" },
       { id: 'menza', name: 'Menza', title: 'Hlavní Menza VŠB', lat: 49.83487, lng: 18.16312, color: '#F59E0B', icon: '🍔',
-        floors: `<b>Stav:</b> ${getMenzaStatus()}<br><b>Otevírací doba:</b> Po-Čt 10:45 – 14:30 (Výdej do 14:15), Pá 10:45 – 14:00.<br><b>Nabídka:</b> Hotovky, pizza, salátový bar.` },
+        floors: `<b>Stav:</b> ${getMenzaStatus()}<br><b>Otevírací doba:</b> Po-Čt 10:45 – 14:30 (Výdej do 14:15), Pá 10:45 – 14:00.<br><b>Nabídka:</b> Hotovky, pizza, salátový bar.<div class="ug-menu">Načítám dnešní menu…</div>` },
       { id: 'knihovna', name: 'Knihovna', title: 'Ústřední knihovna VŠB', lat: 49.83128, lng: 18.16185, color: '#008B8B', icon: '📚',
         floors: "<b>Přízemí:</b> Výpůjční pult.<br><b>1.-2. patro:</b> Tiché studovny.<br><b>Otevřeno:</b> Po-Pá 8:00 - 20:00" },
       { id: 'koleje', name: 'Koleje', title: 'Studentské rezidence', lat: 49.83604, lng: 18.15781, color: '#6B238E', icon: '🛏️',
@@ -612,7 +629,7 @@
             <div style="font-weight: 800; font-size: 14px; color: #fff; margin-bottom: 4px;">${b.icon} ${b.name}</div>
             <div style="font-size: 10px; color: #a1a1aa; margin-bottom: 8px;">${b.title}</div>
             <div style="font-size: 11px; color: #d4d4d8; line-height: 1.4; margin-bottom: 10px;">${b.floors}</div>
-            <button onclick="playBeep(); startNav(${b.lat}, ${b.lng}, '${b.name}')" style="width: 100%; background: var(--brand-color, #008751); color: #ffffff; border: none; padding: 9px; border-radius: 10px; font-weight: 800; font-size: 11px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+            <button onclick="playBeep(); startNav(${b.lat}, ${b.lng}, '${b.name}')" style="width: 100%; background: var(--brand-color, #2563eb); color: #ffffff; border: none; padding: 9px; border-radius: 10px; font-weight: 800; font-size: 11px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
               Navigovat sem
             </button>
           </div>
@@ -639,7 +656,7 @@
       const q = query.toLowerCase().trim();
       const chipsContainer = document.getElementById('building-chips');
       if(!q) {
-        chipsContainer.innerHTML = vsbBuildings.map(b => `<button onclick="playBeep(); centerBuilding('${b.id}')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5" style="color: ${b.color};"><i class="fa-solid fa-${b.id === 'menza' ? 'burger' : b.id === 'knihovna' ? 'book' : b.id === 'koleje' ? 'bed' : 'building'}"></i> ${b.name}</button>`).join('');
+        chipsContainer.innerHTML = vsbBuildings.map(b => `<button onclick="playBeep(); centerBuilding('${b.id}')" class="bg-white backdrop-blur-md border border-gray-100 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5" style="color: ${b.color};"><i class="fa-solid fa-${b.id === 'menza' ? 'burger' : b.id === 'knihovna' ? 'book' : b.id === 'koleje' ? 'bed' : 'building'}"></i> ${b.name}</button>`).join('');
         return;
       }
 
@@ -650,13 +667,13 @@
 
       let html = '';
       matchedClassrooms.forEach(c => {
-        html += `<button onclick="playBeep(); centerBuilding('${c.building}')" class="bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 text-xs font-bold px-3 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-door-open"></i> Učebna ${c.name}</button>`;
+        html += `<button onclick="playBeep(); centerBuilding('${c.building}')" class="bg-emerald-950/90 border border-blue-600/50 text-emerald-300 text-xs font-bold px-3 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-door-open"></i> Učebna ${c.name}</button>`;
       });
       matchedBuildings.forEach(b => {
-        html += `<button onclick="playBeep(); centerBuilding('${b.id}')" class="bg-zinc-900/95 backdrop-blur-md border border-zinc-700/80 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5" style="color: ${b.color};"><i class="fa-solid fa-location-dot"></i> ${b.name} - ${b.title}</button>`;
+        html += `<button onclick="playBeep(); centerBuilding('${b.id}')" class="bg-white backdrop-blur-md border border-gray-100 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5" style="color: ${b.color};"><i class="fa-solid fa-location-dot"></i> ${b.name} - ${b.title}</button>`;
       });
 
-      chipsContainer.innerHTML = html || `<span class="text-xs text-zinc-400 px-2 py-1">Žádná budova ani učebna nenalezena</span>`;
+      chipsContainer.innerHTML = html || `<span class="text-xs text-gray-500 px-2 py-1">Žádná budova ani učebna nenalezena</span>`;
     }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -677,7 +694,7 @@
         } else if (map) {
           const userHtml = `
             <div style="transform: translate(-50%, -50%); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; position: relative;">
-              <div style="width: 20px; height: 20px; background: var(--brand-color, #008751); border: 3px solid #ffffff; border-radius: 50%; box-shadow: 0 0 15px rgba(0,135,81,0.9);"></div>
+              <div style="width: 20px; height: 20px; background: var(--brand-color, #2563eb); border: 3px solid #ffffff; border-radius: 50%; box-shadow: 0 0 15px rgba(0,135,81,0.9);"></div>
             </div>
           `;
           const userIcon = L.divIcon({ className: '', html: userHtml, iconSize: [0, 0] });
@@ -726,8 +743,8 @@
     function drawRoute(coords, color) {
       if (routeLine) map.removeLayer(routeLine);
       if (routeCasing) map.removeLayer(routeCasing);
-      routeCasing = L.polyline(coords, { color: '#ffffff', weight: 10, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
-      routeLine = L.polyline(coords, { color, weight: 6, opacity: 1, lineCap: 'round', lineJoin: 'round', dashArray: '1 10', className: 'walk-route' }).addTo(map);
+      routeCasing = L.polyline(coords, { color: '#ffffff', weight: 13, opacity: 1, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+      routeLine = L.polyline(coords, { color: '#2563eb', weight: 7, opacity: 1, lineCap: 'round', lineJoin: 'round' }).addTo(map);
     }
 
     async function fetchCampusRoute(force = true) {
@@ -737,7 +754,7 @@
       if (!force && lastRouteFrom && calculateDistance(from.lat, from.lng, lastRouteFrom.lat, lastRouteFrom.lng) < 20) return;
       lastRouteFrom = from;
       const reqId = ++routeRequestId;
-      const color = getComputedStyle(document.documentElement).getPropertyValue('--brand-color').trim() || '#008751';
+      const color = getComputedStyle(document.documentElement).getPropertyValue('--brand-color').trim() || '#2563eb';
       document.getElementById('hud-dist').innerText = 'Hledám pěší trasu…';
 
       try {
@@ -804,7 +821,7 @@
         updateXPDisplay();
         stopNav();
         const item = document.getElementById(activeQuest.itemId);
-        item.innerHTML = `<div class="space-y-0.5"><h4 class="text-sm font-bold text-emerald-400">✓ Splněno: ${activeQuest.name}</h4><p class="text-xs text-zinc-400">+${activeQuest.xp} XP připsáno</p></div><span class="text-xs font-semibold text-emerald-400 bg-emerald-500/15 px-3 py-1 rounded-xl">Hotovo</span>`;
+        item.innerHTML = `<div class="space-y-0.5"><h4 class="text-sm font-bold text-blue-600">✓ Splněno: ${activeQuest.name}</h4><p class="text-xs text-gray-500">+${activeQuest.xp} XP připsáno</p></div><span class="text-xs font-semibold text-blue-600 bg-blue-600/15 px-3 py-1 rounded-xl">Hotovo</span>`;
         alert(`🎉 Úspěšně jsi dorazil/a k budově ${activeQuest.name}! Získáváš +${activeQuest.xp} XP.`);
         activeQuest = null;
       } else {
@@ -830,12 +847,13 @@
         'map': document.getElementById('nav-btn-map'),
         'quests': document.getElementById('nav-btn-quests'),
         'game': document.getElementById('nav-btn-game'),
+        'sluzby': document.getElementById('nav-btn-sluzby'),
         'profile': document.getElementById('nav-btn-profile')
       };
 
       for (const [key, btn] of Object.entries(navButtons)) {
         if(btn) {
-          btn.className = key === tabId ? "flex flex-col items-center text-brand-500 transition gap-0.5" : "flex flex-col items-center text-zinc-400 hover:text-zinc-200 transition gap-0.5";
+          btn.className = key === tabId ? "flex flex-col items-center text-brand-500 transition gap-0.5" : "flex flex-col items-center text-gray-500 hover:text-gray-800 transition gap-0.5";
         }
       }
       
@@ -847,13 +865,13 @@
       document.querySelectorAll('.game-box').forEach(el => el.classList.add('hidden'));
       ['snake', 'tetris', 'pexeso', 'breakout', 'rocket'].forEach(g => {
         const btn = document.getElementById(`btn-game-${g}`);
-        if(btn) btn.className = "px-3.5 py-2 text-xs font-bold rounded-xl text-zinc-400 transition whitespace-nowrap";
+        if(btn) btn.className = "px-3.5 py-2 text-xs font-bold rounded-xl text-gray-500 transition whitespace-nowrap";
       });
 
       document.getElementById(`game-container-${gameName}`).classList.remove('hidden');
       const activeBtnMap = { 'snake': 'emerald', 'tetris': 'cyan', 'pexeso': 'pink', 'breakout': 'amber', 'rocket': 'rose' };
       const color = activeBtnMap[gameName] || 'emerald';
-      document.getElementById(`btn-game-${gameName}`).className = `px-3.5 py-2 text-xs font-bold rounded-xl bg-${color}-500 text-zinc-950 transition whitespace-nowrap shadow-md`;
+      document.getElementById(`btn-game-${gameName}`).className = `px-3.5 py-2 text-xs font-bold rounded-xl bg-${color}-500 text-white transition whitespace-nowrap shadow-md`;
 
       if(gameName === 'snake') initSnakeGame();
       if(gameName === 'tetris') startTetrisGame();
@@ -995,7 +1013,7 @@
             canFlip = false;
             setTimeout(() => {
               if(flippedCards[0].letter === flippedCards[1].letter && flippedCards[0].idx !== flippedCards[1].idx) {
-                flippedCards.forEach(f => f.card.classList.add('matched', 'border-emerald-500', 'text-emerald-400', 'bg-emerald-950/60', 'shadow-[0_0_20px_rgba(16,185,129,0.7)]'));
+                flippedCards.forEach(f => f.card.classList.add('matched', 'border-blue-600', 'text-blue-600', 'bg-emerald-950/60', 'shadow-[0_0_20px_rgba(16,185,129,0.7)]'));
                 matchedPairs++; 
                 document.getElementById('pexeso-matches').innerText = matchedPairs;
                 if(matchedPairs === 4) {
@@ -1160,16 +1178,17 @@
       const icon = L.divIcon({className:'', html:`<div class="ug-tram"><i class="fa-solid fa-train-tram"></i> ${s.name}</div>`, iconSize:[0,0]});
       const html = `<div style="width:230px;padding:8px">
         <div style="font-weight:900;font-size:14px">🚋 Zastávka ${s.name}</div>
-        <div style="font-size:11px;color:#a1a1aa;margin:2px 0 8px">${s.dir} · tramvaje mezi Porubou a Svinovem</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <button onclick="playBeep(); startNav(${s.lat}, ${s.lng}, 'Tram VŠB-TUO')" style="background:var(--brand-color);color:#fff;border:0;padding:9px;border-radius:10px;font-weight:800;font-size:11px">Navigovat</button>
-          <a href="${idos('VŠB-TUO','Svinov mosty')}" target="_blank" rel="noopener" style="background:#27272a;color:#fff;padding:9px;border-radius:10px;font-weight:800;font-size:11px;text-align:center;text-decoration:none">Odjezdy ↗</a>
+        <div style="font-size:11px;color:#6b7280;margin:2px 0 8px">${s.dir} · tramvaje mezi Porubou a Svinovem</div>
+        <div class="ug-board" data-stop="${s.id}"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+          <button onclick="playBeep(); startNav(${s.lat}, ${s.lng}, 'Tram VŠB-TUO')" style="background:#2563eb;color:#fff;border:0;padding:10px;border-radius:999px;font-weight:700;font-size:12px">Navigovat</button>
+          <a href="${idos('VŠB-TUO','Svinov mosty')}" target="_blank" rel="noopener" style="background:#f3f4f6;color:#111827;padding:10px;border-radius:999px;font-weight:700;font-size:12px;text-align:center;text-decoration:none">IDOS ↗</a>
         </div></div>`;
       mapMarkers[s.id] = L.marker([s.lat,s.lng],{icon, zIndexOffset:500}).addTo(map).bindPopup(html);
     });
     // čip do horní lišty
     const chips = $('building-chips');
-    if(chips) chips.insertAdjacentHTML('afterbegin', `<button onclick="playBeep(); centerBuilding('tram-svinov')" class="bg-zinc-900/95 backdrop-blur-md border border-red-500/60 text-red-300 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-xl whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-train-tram"></i> Tram VŠB-TUO</button>`);
+    if(chips) chips.insertAdjacentHTML('afterbegin', `<button onclick="playBeep(); centerBuilding('tram-svinov')" class="bg-white backdrop-blur-md border border-red-500/60 text-red-300 text-xs font-bold px-3.5 py-2 rounded-2xl shadow-md whitespace-nowrap active:scale-95 transition flex items-center gap-1.5"><i class="fa-solid fa-train-tram"></i> Tram VŠB-TUO</button>`);
   }
 
   // ===== Seznam cílů seřazený podle vzdálenosti od tebe =====
@@ -1256,7 +1275,7 @@
       { q:'Kde sídlí Fakulta bezpečnostního inženýrství?', a:['V Porubě u menzy','Ve Výškovicích','Ve Svinově','V centru'], c:1 },
       { q:'Jak se jmenuje přestupní uzel, kam jezdí tramvaje od VŠB?', a:['Svinov mosty','Dubina','Dřevařská','Náměstí Republiky'], c:0 },
       { q:'Co znamená zkratka TUO?', a:['Technika u Odry','Technická univerzita Ostrava','Teoretická univerzita Ostrava','Tým univerzit Ostravy'], c:1 },
-      { q:'Která fakulta se dříve jmenovala FMMI?', a:['FMT','FAST','HGF','FS'], c:0 },
+      { q:'Která fakulta se dříve jmenovala FMT?', a:['FMT','FAST','HGF','FS'], c:0 },
       { q:'Kde si půjčíš skripta a najdeš tichou studovnu?', a:['V Menze','Ve Sportovní hale','V Ústřední knihovně','Na kolejích'], c:2 }
     ],
     hard: [
@@ -1275,7 +1294,7 @@
   function shuffle(a){ return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1]); }
   window.setQuizLevel = function(l){
     level = l;
-    ['easy','medium','hard'].forEach(k=>{ const b=$('q-btn-'+k); if(!b) return; b.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg transition ' + (k===l?'bg-brand-500 text-zinc-950':'bg-zinc-800 text-zinc-400'); });
+    ['easy','medium','hard'].forEach(k=>{ const b=$('q-btn-'+k); if(!b) return; b.className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg transition ' + (k===l?'bg-brand-500 text-white':'bg-gray-100 text-gray-500'); });
     initQuiz();
   };
   window.initQuiz = function(){ qs = shuffle(quizBank[level]).slice(0,5); idx=0; score=0; renderQ(); };
@@ -1304,12 +1323,93 @@
     const ok = +btn.dataset.i===q.c;
     if(!ok) btn.classList.add('bad');
     if(ok){ score++; if(currentUser){ currentUser.xp += levelXp[level]; updateXPDisplay(); } }
-    fb.className = 'text-xs font-bold text-center mt-2 ' + (ok?'text-emerald-400':'text-rose-400');
+    fb.className = 'text-xs font-bold text-center mt-2 ' + (ok?'text-blue-600':'text-rose-400');
     fb.innerText = ok ? `Správně! +${levelXp[level]} XP` : `Vedle. Správně je: ${q.a[q.c]}`;
     setTimeout(()=>{ idx++; renderQ(); }, 1400);
   }
   if(document.readyState!=='loading') initQuiz(); else document.addEventListener('DOMContentLoaded', ()=>initQuiz());
 })();
 </script>
+<style>
+  /* ===== UniGO light – Apple-like ===== */
+  body{background:#f9fafb !important;color:#111827 !important}
+  header{background:rgba(255,255,255,.92) !important;backdrop-filter:blur(18px);border-bottom:1px solid #f3f4f6 !important;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  header::after{display:none !important}
+  nav{background:#fff !important;margin:0 !important;border-radius:0 !important;border:0 !important;border-top:1px solid #f3f4f6 !important;box-shadow:0 -6px 24px -10px rgba(17,24,39,.12) !important;padding-bottom:max(10px,env(safe-area-inset-bottom)) !important}
+  nav button{color:#9ca3af !important;background:transparent !important;box-shadow:none !important}
+  nav button.text-brand-500{color:#2563eb !important}
+  #tab-quests,#tab-game,#tab-sluzby,#tab-profile{background:#f9fafb !important}
+  #tab-quests>div,#tab-game>div,#tab-profile>div{border-radius:24px}
+  .ug-glass{background:rgba(255,255,255,.97) !important;color:#111827;border:1px solid #f3f4f6 !important;box-shadow:0 12px 32px -12px rgba(17,24,39,.2) !important}
+  #ug-gps-status{color:#6b7280 !important}
+  #ug-toggle{background:#f3f4f6 !important;color:#374151 !important;border-radius:999px !important}
+  .ug-dest{background:#f9fafb !important;border:1px solid #f3f4f6 !important;color:#111827}
+  .ug-dest:hover{background:#eff6ff !important}
+  .ug-dest *{color:inherit}
+  .ug-opt{background:#fff !important;border:1px solid #e5e7eb !important;color:#111827 !important}
+  .ug-opt:hover:not(:disabled){border-color:#2563eb !important}
+  .ug-opt.ok{background:#ecfdf5 !important;border-color:#10b981 !important;color:#065f46 !important}
+  .ug-opt.bad{background:#fff1f2 !important;border-color:#f43f5e !important;color:#9f1239 !important}
+  .ug-tram{color:#2563eb !important;border-color:#2563eb !important;border-radius:999px !important;box-shadow:0 6px 16px rgba(37,99,235,.25) !important}
+  .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#fff !important;color:#111827 !important;border:0 !important;backdrop-filter:none}
+  .leaflet-popup-content-wrapper{border-radius:24px !important;box-shadow:0 18px 40px -12px rgba(17,24,39,.25) !important}
+  .leaflet-popup-content-wrapper div{color:inherit}
+  .leaflet-popup-content-wrapper [style*="color: #fff"],.leaflet-popup-content-wrapper [style*="color:#fff"]:not(button){color:#111827 !important}
+  .leaflet-popup-content-wrapper [style*="#a1a1aa"],.leaflet-popup-content-wrapper [style*="#d4d4d8"]{color:#6b7280 !important}
+  .leaflet-popup-content-wrapper button[style]{background:#2563eb !important;color:#fff !important;border-radius:999px !important;box-shadow:0 6px 16px rgba(37,99,235,.3) !important}
+  .leaflet-popup-content-wrapper a[style]{background:#f3f4f6 !important;color:#111827 !important}
+  .leaflet-container{background:#f3f4f6 !important;filter:none !important}
+  .leaflet-tile-pane{filter:none !important}
+  .arcade-cabinet{background:#fff !important;border:1px solid #e5e7eb !important;box-shadow:0 10px 30px -12px rgba(17,24,39,.2) !important}
+  .game-box canvas{border-color:#e5e7eb !important}
+  #heart-popup-overlay>div{background:#fff !important;border-color:#f3f4f6 !important}
+  input,select{background:#fff !important;color:#111827 !important;border-color:#e5e7eb !important}
+  .ug-menu{margin-top:10px;background:#f9fafb;border-radius:18px;padding:12px;font-size:12px;color:#111827;max-height:220px;overflow-y:auto}
+  .ug-menu h5{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin:0 0 6px;display:flex;justify-content:space-between}
+  .ug-menu .row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid #eef0f3}
+  .ug-menu .row:first-of-type{border-top:0}
+  .ug-menu .k{font-size:10px;color:#6b7280;font-weight:600}
+  .ug-menu .n{font-weight:600;line-height:1.3}
+  .ug-menu .p{font-weight:800;color:#2563eb;white-space:nowrap}
+  .ug-board{background:#f9fafb;border-radius:18px;padding:10px 12px}
+  .ug-board .r{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
+  .ug-board .r+.r{border-top:1px solid #eef0f3}
+  .ug-board .d{font-size:12px;font-weight:700;color:#111827;display:flex;align-items:center;gap:8px}
+  .ug-board .d i{color:#2563eb}
+  .ug-board .t{font-size:18px;font-weight:800;color:#2563eb}
+  .ug-board .t small{font-size:11px;color:#9ca3af;font-weight:600;margin-left:6px}
+</style>
+<script>
+(function(){
+  var esc=function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  var menu=null, menuErr=false;
+  fetch('/api/public/menza').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){menu=d;fill()}).catch(function(){menuErr=true;fill()});
+  function menuHtml(){
+    if(menuErr) return '<h5>Dnešní menu</h5>Menu se nepodařilo načíst. <a href="https://stravovani.vsb.cz/webkredit/Ordering/Menu" target="_blank" rel="noopener" style="color:#2563eb;font-weight:700">Otevřít web ↗</a>';
+    if(!menu) return '<h5>Dnešní menu</h5>Načítám…';
+    if(!menu.items.length) return '<h5>Dnešní menu</h5>Dnes se nevaří.';
+    return '<h5><span>Dnešní menu</span><span style="color:#9ca3af">živě z WebKreditu</span></h5>'+menu.items.map(function(i){
+      return '<div class="row"><div><div class="k">'+esc(i.kind)+'</div><div class="n">'+esc(i.name)+'</div></div><div class="p">'+(i.price?Math.round(i.price)+' Kč':'')+'</div></div>'}).join('');
+  }
+  function fill(){var sm=document.getElementById('sluzby-menu');if(sm&&menu&&menu.items.length){sm.innerHTML=menu.items.map(function(i){return '<div class="flex justify-between gap-3 py-2.5"><span class="text-xs text-gray-500 shrink-0">'+esc(i.kind)+'</span><span class="text-sm font-semibold text-gray-900 text-right">'+esc(i.name)+(i.price?' <span class="text-blue-600">'+Math.round(i.price)+' Kč</span>':'')+'</span></div>'}).join('')}document.querySelectorAll('.ug-menu').forEach(function(el){el.innerHTML=menuHtml()})}
+  // ukázková odjezdová tabule (mock, intervaly 10 min)
+  function board(){
+    var m=new Date().getMinutes();
+    var next=function(off){var a=(off-m%10+10)%10||10;return [a,a+10]};
+    var rows=[['Svinov mosty',next(2)],['Poruba',next(5)]];
+    return rows.map(function(r){return '<div class="r"><div class="d"><i class="fa-solid fa-train-tram"></i>Směr '+r[0]+'</div><div class="t">'+r[1][0]+' min<small>'+r[1][1]+' min</small></div></div>'}).join('');
+  }
+  function hook(){
+    if(typeof map==='undefined'||!map){return setTimeout(hook,500)}
+    if(map._ugHook) return; map._ugHook=true;
+    map.on('popupopen',function(){fill();document.querySelectorAll('.ug-board').forEach(function(el){el.innerHTML=board()})});
+  }
+  hook(); setInterval(function(){if(typeof map!=='undefined'&&map&&!map._ugHook)hook()},2000);
+  // když běží navigace, schovej panel „Kam jdeš?"
+  var hud=document.getElementById('navigation-hud');
+  if(hud) new MutationObserver(function(){var sh=document.getElementById('ug-sheet');if(sh&&sh.dataset.ugv!=='x'){if(!hud.classList.contains('hidden')){sh.dataset.prev=sh.style.display;sh.style.visibility='hidden'}else sh.style.visibility=''}}).observe(hud,{attributes:true,attributeFilter:['class']});
+})();
+</script>
+
 </body>
 </html>
