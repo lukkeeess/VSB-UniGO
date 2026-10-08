@@ -98,39 +98,41 @@
     </div>
 
     <!-- Luxusní full-screen úvodní obrazovka -->
-    <div id="screen-auth" class="absolute inset-0 z-40 bg-gradient-to-b from-white to-blue-50 px-6 py-10 flex flex-col justify-between overflow-y-auto">
-      <div class="my-auto space-y-8 max-w-md mx-auto w-full">
-        <div class="text-center space-y-3">
-          <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 via-teal-400 to-cyan-500 rounded-3xl mx-auto flex items-center justify-center text-gray-900 text-5xl shadow-lg shadow-blue-600/50">
-            <i class="fa-solid fa-graduation-cap"></i>
+    <div id="screen-auth" class="absolute inset-0 z-40 bg-slate-50 px-6 py-10 flex flex-col items-center justify-between overflow-y-auto">
+      <div class="my-auto w-full max-w-md space-y-8">
+        <div class="text-center">
+          <div class="w-28 h-28 mx-auto rounded-full bg-blue-50 flex items-center justify-center">
+            <i class="fa-solid fa-location-dot text-blue-600 text-6xl"></i>
           </div>
-          <div>
-            <h1 class="text-4xl font-black tracking-tight text-gray-900">VŠB UniGO</h1>
-            <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mt-1">Oficiální kampusový průvodce & Arkády</p>
-          </div>
+          <h1 class="mt-5 text-4xl font-black tracking-tight"><span class="text-gray-900">VŠB</span> <span class="text-blue-600">UniGO</span></h1>
+          <p class="mt-1.5 text-sm font-medium text-gray-500">Kampus, ve kterém se neztratíš.</p>
         </div>
 
-        <div class="bg-white/90 backdrop-blur-2xl p-8 rounded-3xl border border-gray-100 space-y-5 shadow-lg">
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše jméno / přezdívka</label>
-            <input type="text" id="auth-name" placeholder="např. Ing. Jan Novák" class="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-gray-100 text-sm focus:outline-none focus:border-blue-600 transition text-gray-900 font-semibold">
+        <div class="bg-white p-8 rounded-3xl shadow-xl">
+          <h2 class="text-3xl font-black text-gray-900">Ahoj!</h2>
+          <p class="text-sm text-gray-500 mb-6">Zadej přezdívku a vyber svou fakultu.</p>
+          <div class="space-y-5">
+            <div class="space-y-2">
+              <label for="auth-name" class="block text-xs font-bold text-blue-600 uppercase tracking-widest">Přezdívka</label>
+              <input type="text" id="auth-name" placeholder="Tvoje přezdívka" class="ug-auth-field w-full px-4 py-3.5 bg-slate-100 border-none rounded-xl text-sm font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
+            </div>
+            <div class="space-y-2">
+              <label for="auth-faculty" class="block text-xs font-bold text-blue-600 uppercase tracking-widest">Fakulta</label>
+              <select id="auth-faculty" class="ug-auth-field w-full px-4 py-3.5 bg-slate-100 border-none rounded-xl text-sm font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 cursor-pointer">
+                <option value="FEI">FEI – Fakulta elektrotechniky a informatiky</option>
+                <option value="FBI">FBI – Fakulta bezpečnostního inženýrství</option>
+                <option value="FAST">FAST – Fakulta stavební</option>
+                <option value="EkF">EkF – Ekonomická fakulta</option>
+                <option value="HGF">HGF – Hornicko-geologická fakulta</option>
+                <option value="FMT">FMT – Fakulta materiálově-technologická</option>
+                <option value="FS">FS – Fakulta strojní</option>
+              </select>
+            </div>
+            <button onclick="playBeep(); handleLogin()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-600/25 transition active:scale-[.98] text-base">Vstoupit do kampusu</button>
           </div>
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Vaše fakulta (oficiální brandové barvy)</label>
-            <select id="auth-faculty" class="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-gray-100 text-sm font-black text-blue-600 focus:outline-none cursor-pointer">
-              <option value="FEI">FEI – Fakulta elektrotechniky a informatiky (#2563eb)</option>
-              <option value="FBI">FBI – Fakulta bezpečnostního inženýrství (#C8102E)</option>
-              <option value="FAST">FAST – Fakulta stavební (#E2007A)</option>
-              <option value="EkF">EkF – Ekonomická fakulta (#005A9C)</option>
-              <option value="HGF">HGF – Hornicko-geologická fakulta (#8B5A2B)</option>
-              <option value="FMT">FMT – Fakulta materiálově-technologická (#F37021)</option>
-              <option value="FS">FS – Fakulta strojní (#5C2D91)</option>
-            </select>
-          </div>
-          <button onclick="playBeep(); handleLogin()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-600 hover:to-teal-400 text-gray-900 font-black rounded-2xl shadow-md shadow-blue-600/30 transition-all transform active:scale-95 text-base tracking-wide">VSTOUPIT DO KAMPUSU</button>
         </div>
       </div>
-      <div class="text-center text-xs text-gray-400 font-semibold tracking-wider">VŠB-TUO • Ostrava-Poruba</div>
+      <p class="text-xs text-gray-400 font-medium text-center">VŠB – Technická univerzita Ostrava</p>
     </div>
 
     <!-- HLAVNÍ APLIKACE -->
@@ -1363,7 +1365,8 @@
   .arcade-cabinet{background:#fff !important;border:1px solid #e5e7eb !important;box-shadow:0 10px 30px -12px rgba(17,24,39,.2) !important}
   .game-box canvas{border-color:#e5e7eb !important}
   #heart-popup-overlay>div{background:#fff !important;border-color:#f3f4f6 !important}
-  input,select{background:#fff !important;color:#111827 !important;border-color:#e5e7eb !important}
+  input:not(.ug-auth-field),select:not(.ug-auth-field){background:#fff !important;color:#111827 !important;border-color:#e5e7eb !important}
+  .ug-auth-field{background:#f1f5f9 !important;color:#111827 !important}
   .ug-menu{margin-top:10px;background:#f9fafb;border-radius:18px;padding:12px;font-size:12px;color:#111827;max-height:220px;overflow-y:auto}
   .ug-menu h5{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;margin:0 0 6px;display:flex;justify-content:space-between}
   .ug-menu .row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid #eef0f3}
