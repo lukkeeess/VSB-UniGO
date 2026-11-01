@@ -1,6 +1,6 @@
 {
   "short_name": "UniGO",
-  "name": "VŠB UniGO - Kampusová navigace",
+  "name": "VŠB UniGO",
   "description": "Oficiální kampusová aplikace pro VŠB-TUO Poruba",
   "start_url": "https://lukkeeess.github.io/VSB-UniGO/",
   "display": "standalone",
