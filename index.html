@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VŠB UniGO – kampus, ve kterém se neztratíš</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>VŠB UniGO – živá navigace kampusem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -134,7 +132,7 @@
           </div>
         </div>
       </div>
-      <p class="text-xs text-gray-400 font-medium text-center">VŠB – Technická univerzita Ostrava</p>
+      <p class="text-xs text-gray-400 font-medium text-center">@vsb.unigo</p>
     </div>
 
     <!-- HLAVNÍ APLIKACE -->
@@ -143,7 +141,7 @@
       <!-- HORNÍ LIŠTA -->
       <header class="px-5 py-3.5 border-b border-gray-100 bg-white backdrop-blur-xl flex items-center justify-between z-40 shrink-0">
         <div class="flex items-center gap-3">
-          <div class="ug-logo-pill" aria-label="VŠB UniGO" style="box-shadow:none;padding:4px 12px 4px 4px"><span class="ug-logo-badge"><i class="fa-solid fa-location-arrow"></i></span><span class="ug-logo-text">VŠB <b>UniGO</b></span></div>
+          <div class="ug-logo-pill" aria-label="VŠB UniGO" style="box-shadow:none;padding:0;gap:10px"><img src="data:image/png;base64,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" alt="UniGO" class="ug-logo-mark"><span class="ug-logo-text">VŠB <b>UniGO</b></span></div>
           <div>
             <p id="header-faculty" class="text-[10px] font-black text-brand-500 uppercase tracking-widest">FEI • VŠB-TUO</p>
             <h2 id="header-username" class="text-sm font-bold text-gray-900">Uživatel</h2>
@@ -350,6 +348,14 @@
           <h2 class="text-2xl font-bold text-gray-900 px-1 pt-1">Služby</h2>
           <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5">
             <div class="flex items-center gap-3 mb-3">
+              <div class="w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg"><i class="fa-solid fa-newspaper"></i></div>
+              <div><h3 class="text-base font-bold text-gray-900">Aktuality</h3><p class="text-xs text-gray-500">Magazín Akademik</p></div>
+            </div>
+            <div id="sluzby-news" class="space-y-3"><p class="campus-note" style="margin:0">Načítám aktuality…</p></div>
+            <a class="campus-service-link" href="https://www.vsb.cz/magazin/cs/" target="_blank" rel="noopener">Všechny aktuality <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-5">
+            <div class="flex items-center gap-3 mb-3">
               <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-utensils"></i></div>
               <div><h3 class="text-base font-bold text-gray-900">Menza</h3><p class="text-xs text-gray-500">Dnešní menu</p></div>
             </div>
@@ -430,7 +436,8 @@
 
   </div>
 
-  <script>// Budovy areálu VŠB-TUO podle oficiální mapy (vsb.cz → Mapy areálů) a polygonů OpenStreetMap.
+  <script>
+// Budovy areálu VŠB-TUO podle oficiální mapy (vsb.cz → Mapy areálů) a polygonů OpenStreetMap.
 // faculties = fakulty, které v budově mají většinu výuky (zvýrazní se barvou fakulty).
 window.UniGOCampus = [
   { id:'fei', name:'FEI', title:'Fakulta elektrotechniky a informatiky · budovy EA, EB, EC', codes:'EA EB EC FEI POREL', category:'faculties', lat:49.83165, lng:18.16097, deans:['FEI'], faculties:['FEI'] },
@@ -475,18 +482,50 @@ window.UniGOCampus = [
   { id:'ne', name:'NE', title:'Energoblok', codes:'NE energoblok', category:'other', lat:49.83213, lng:18.15785, faculties:[] },
   { id:'ug', name:'UG', title:'Ústav geoniky AV ČR', codes:'UG geonika', category:'other', lat:49.83223, lng:18.15850, faculties:['HGF'] }
 ];
-</script>
-  <script>// Doplňkové služby (menu, odjezdy) – zatím bez externího zdroje.
 
-// Záložní obsah pro kartu Menzy, dokud není připojený jídelníček.
+</script>
+  <script>
+// Jídelníček menzy z WebKreditu (přes /api/public/menza).
+window.UNIGO_MENU_URL = window.UNIGO_MENU_URL || '/api/public/menza';
 window.refreshCampusMenu = function () {
   const menu = document.getElementById('sluzby-menu');
-  if (menu) menu.innerHTML = '<p class="campus-note" style="margin:0">Dnešní menu teď nemám k dispozici – aktuální jídelníček najdeš na WebKreditu (odkaz níže).</p>';
   const updated = document.getElementById('menu-updated');
-  if (updated) updated.textContent = 'Jídelníček zatím není připojený';
+  if (!menu) return;
+  menu.innerHTML = '<p class="campus-note" style="margin:0">Načítám jídelníček…</p>';
+  fetch(window.UNIGO_MENU_URL).then(r => r.json()).then(data => {
+    const day = (data.days || [])[0];
+    if (!day || !day.groups.length) throw 0;
+    const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    menu.innerHTML = '<strong>' + esc(day.date) + '</strong>' + day.groups.map(g =>
+      '<div style="margin-top:6px"><b>' + esc(g.name) + '</b><ul style="margin:2px 0 0 16px;padding:0">' +
+      g.items.map(i => '<li>' + esc(i) + '</li>').join('') + '</ul></div>').join('');
+    if (updated) updated.textContent = 'Zdroj: WebKredit VŠB';
+  }).catch(() => {
+    menu.innerHTML = '<p class="campus-note" style="margin:0">Jídelníček se nepodařilo načíst – <a href="https://stravovani.vsb.cz/webkredit/Ordering/Menu" target="_blank" rel="noopener">otevřít WebKredit</a>.</p>';
+    if (updated) updated.textContent = '';
+  });
 };
 if (document.readyState !== 'loading') window.refreshCampusMenu();
 else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
+
+// Aktuality z magazínu Akademik (přes /api/public/news).
+window.UNIGO_NEWS_URL = window.UNIGO_NEWS_URL || '/api/public/news';
+window.refreshCampusNews = function () {
+  const box = document.getElementById('sluzby-news');
+  if (!box) return;
+  const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  fetch(window.UNIGO_NEWS_URL).then(r => r.json()).then(d => {
+    if (!d.items || !d.items.length) throw 0;
+    box.innerHTML = d.items.map(n =>
+      '<a href="' + esc(n.url) + '" target="_blank" rel="noopener" style="display:flex;gap:10px;text-decoration:none;color:inherit">' +
+      (n.image ? '<img src="' + esc(n.image) + '" alt="" loading="lazy" style="width:84px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0">' : '') +
+      '<div style="min-width:0"><div style="font-size:13px;font-weight:700;line-height:1.25">' + esc(n.title) + '</div>' +
+      '<div style="font-size:11px;color:#6b7280;margin-top:2px">' + esc(n.date) + '</div></div></a>').join('');
+  }).catch(() => { box.innerHTML = '<p class="campus-note" style="margin:0">Aktuality se nepodařilo načíst.</p>'; });
+};
+if (document.readyState !== 'loading') window.refreshCampusNews();
+else document.addEventListener('DOMContentLoaded', window.refreshCampusNews);
+
 </script>
   <!-- JAVASCRIPT LOGIKA -->
   <script>
@@ -1482,7 +1521,8 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
   .ug-board .t{font-size:18px;font-weight:800;color:#2563eb}
   .ug-board .t small{font-size:11px;color:#9ca3af;font-weight:600;margin-left:6px}
 </style>
-<style>:root{--campus-neutral:#00A499}
+<style>
+:root{--campus-neutral:#00A499}
 .campus-marker-wrap{background:none;border:0}
 .campus-marker{position:absolute;transform:translate(-50%,-50%);display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:26px;padding:0 8px;border-radius:999px;background:var(--campus-neutral);color:#fff;font:800 11px/1 Inter,sans-serif;border:2px solid #fff;box-shadow:0 4px 12px -4px rgba(0,0,0,.35);white-space:nowrap;opacity:.85}
 .campus-marker-mine{background:var(--brand-color);opacity:1;height:32px;min-width:38px;font-size:13px;z-index:10;box-shadow:0 0 0 4px color-mix(in srgb,var(--brand-color) 30%,transparent),0 6px 16px -4px rgba(0,0,0,.4)}
@@ -1500,6 +1540,7 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
 .campus-open{display:flex;align-items:center;gap:12px;flex:1;min-width:0;max-width:480px;background:#fff;border-radius:20px;padding:12px 16px;box-shadow:0 10px 30px -12px rgba(0,0,0,.3);text-align:left;color:#111827}
 .ug-logo-pill{display:flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:6px 16px 6px 6px;box-shadow:0 10px 30px -12px rgba(0,0,0,.3);flex-shrink:0}
 .ug-logo-badge{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#00A9CE,#1E4D9B);color:#fff;display:grid;place-items:center;font-size:12px;box-shadow:0 4px 10px -3px rgba(0,169,206,.6)}
+.ug-logo-mark{width:36px;height:36px;border-radius:11px;border:1px solid #e5e7eb;box-shadow:0 3px 10px -3px rgba(34,100,234,.45);display:block;flex-shrink:0;object-fit:cover}
 .ug-logo-badge i{transform:rotate(0deg)}
 .ug-logo-text{font:800 15px/1 Inter,sans-serif;color:#6b7280;white-space:nowrap}
 .ug-logo-text b{color:#111827;font-weight:900}
@@ -1582,8 +1623,10 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
 #ug-sheet .campus-search,#ug-sheet .campus-categories,#ug-sheet .campus-sheet-head{flex-shrink:0}
 #ug-sheet .campus-categories{position:relative;z-index:2;min-height:46px;align-items:center;background:#fff}
 #ug-sheet .campus-list{min-height:0;position:relative;z-index:1}
+
 </style>
-<script>// Zvýraznění budov aktuální fakulty v seznamu
+<script>
+// Zvýraznění budov aktuální fakulty v seznamu
 (function(){
   const orig = window.renderCampusList;
   if(!orig) return;
@@ -1598,6 +1641,7 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
     });
   };
 })();
+
 </script>
 </body>
 </html>
