@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VŠB UniGO – Kampus, ve kterém se neztratíš. </title>
+  <title>VŠB UniGO – živá navigace kampusem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -436,8 +436,7 @@
 
   </div>
 
-  <script>
-// Budovy areálu VŠB-TUO podle oficiální mapy (vsb.cz → Mapy areálů) a polygonů OpenStreetMap.
+  <script>// Budovy areálu VŠB-TUO podle oficiální mapy (vsb.cz → Mapy areálů) a polygonů OpenStreetMap.
 // faculties = fakulty, které v budově mají většinu výuky (zvýrazní se barvou fakulty).
 window.UniGOCampus = [
   { id:'fei', name:'FEI', title:'Fakulta elektrotechniky a informatiky · budovy EA, EB, EC', codes:'EA EB EC FEI POREL', category:'faculties', lat:49.83165, lng:18.16097, deans:['FEI'], faculties:['FEI'] },
@@ -482,50 +481,98 @@ window.UniGOCampus = [
   { id:'ne', name:'NE', title:'Energoblok', codes:'NE energoblok', category:'other', lat:49.83213, lng:18.15785, faculties:[] },
   { id:'ug', name:'UG', title:'Ústav geoniky AV ČR', codes:'UG geonika', category:'other', lat:49.83223, lng:18.15850, faculties:['HGF'] }
 ];
-
 </script>
-  <script>
-// Jídelníček menzy z WebKreditu (přes /api/public/menza).
-window.UNIGO_MENU_URL = window.UNIGO_MENU_URL || '/api/public/menza';
-window.refreshCampusMenu = function () {
+  <script>// Menza + aktuality: načítá přímo z VŠB přes veřejné CORS proxy (funguje i na GitHub Pages / offline souboru).
+// Na vlastním serveru se nejdřív zkusí /api/public/*, pak proxy v pořadí.
+window.UNIGO_PROXIES = window.UNIGO_PROXIES || [
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u),
+  u => 'https://cors.eu.org/' + u,
+  u => 'https://thingproxy.freeboard.io/fetch/' + u
+];
+const ugMenuSrc = 'https://stravovani.vsb.cz/webkredit/Api/Ordering/Rss?CanteenId=1&Days=5';
+const ugNewsSrc = 'https://www.vsb.cz/magazin/cs/';
+const ugEsc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ugText = s => { const d = document.createElement('div'); d.innerHTML = s || ''; return (d.textContent || '').replace(/\s+/g, ' ').trim(); };
+
+async function ugFetchText(url, check) {
+  for (const p of window.UNIGO_PROXIES) {
+    try {
+      const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 9000);
+      const r = await fetch(p(url), { signal: ctrl.signal }); clearTimeout(t);
+      if (!r.ok) continue;
+      const txt = await r.text();
+      if (check(txt)) return txt;
+    } catch (e) { /* další proxy */ }
+  }
+  throw new Error('proxy failed');
+}
+async function ugTryApi(path) {
+  if (location.protocol === 'file:') return null;
+  try { const r = await fetch(path); if (r.ok && (r.headers.get('content-type') || '').includes('json')) return await r.json(); } catch (e) {}
+  return null;
+}
+
+function ugParseMenu(xml) {
+  const doc = new DOMParser().parseFromString(xml, 'text/xml');
+  return [...doc.querySelectorAll('item')].map(it => {
+    const html = new DOMParser().parseFromString(it.querySelector('description')?.textContent || '', 'text/html');
+    const groups = [...html.querySelectorAll('h2')].map(h => {
+      const ul = h.nextElementSibling && h.nextElementSibling.tagName === 'UL' ? h.nextElementSibling : null;
+      return { name: ugText(h.innerHTML), items: ul ? [...ul.querySelectorAll('li')].map(li => ugText(li.innerHTML)).filter(Boolean) : [] };
+    });
+    return { date: ugText(it.querySelector('title')?.textContent), groups };
+  });
+}
+function ugParseNews(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const abs = u => !u ? '' : u.startsWith('http') ? u : 'https://www.vsb.cz' + u;
+  return [...doc.querySelectorAll('article.news-item')].slice(0, 3).map(a => ({
+    url: abs(a.querySelector('a')?.getAttribute('href')),
+    image: abs(a.querySelector('img')?.getAttribute('src')),
+    title: ugText(a.querySelector('.news-item__heading')?.innerHTML),
+    date: ugText(a.querySelector('.news-item__meta span, .news-item__meta')?.innerHTML)
+  }));
+}
+
+window.refreshCampusMenu = async function () {
   const menu = document.getElementById('sluzby-menu');
   const updated = document.getElementById('menu-updated');
   if (!menu) return;
   menu.innerHTML = '<p class="campus-note" style="margin:0">Načítám jídelníček…</p>';
-  fetch(window.UNIGO_MENU_URL).then(r => r.json()).then(data => {
-    const day = (data.days || [])[0];
+  try {
+    let days = (await ugTryApi('/api/public/menza'))?.days;
+    if (!days || !days.length) days = ugParseMenu(await ugFetchText(ugMenuSrc, t => t.includes('<item>')));
+    const day = days[0];
     if (!day || !day.groups.length) throw 0;
-    const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-    menu.innerHTML = '<strong>' + esc(day.date) + '</strong>' + day.groups.map(g =>
-      '<div style="margin-top:6px"><b>' + esc(g.name) + '</b><ul style="margin:2px 0 0 16px;padding:0">' +
-      g.items.map(i => '<li>' + esc(i) + '</li>').join('') + '</ul></div>').join('');
+    menu.innerHTML = '<strong>' + ugEsc(day.date) + '</strong>' + day.groups.map(g =>
+      '<div style="margin-top:6px"><b>' + ugEsc(g.name) + '</b><ul style="margin:2px 0 0 16px;padding:0">' +
+      g.items.map(i => '<li>' + ugEsc(i) + '</li>').join('') + '</ul></div>').join('');
     if (updated) updated.textContent = 'Zdroj: WebKredit VŠB';
-  }).catch(() => {
+  } catch (e) {
     menu.innerHTML = '<p class="campus-note" style="margin:0">Jídelníček se nepodařilo načíst – <a href="https://stravovani.vsb.cz/webkredit/Ordering/Menu" target="_blank" rel="noopener">otevřít WebKredit</a>.</p>';
     if (updated) updated.textContent = '';
-  });
+  }
 };
-if (document.readyState !== 'loading') window.refreshCampusMenu();
-else document.addEventListener('DOMContentLoaded', window.refreshCampusMenu);
 
-// Aktuality z magazínu Akademik (přes /api/public/news).
-window.UNIGO_NEWS_URL = window.UNIGO_NEWS_URL || '/api/public/news';
-window.refreshCampusNews = function () {
+window.refreshCampusNews = async function () {
   const box = document.getElementById('sluzby-news');
   if (!box) return;
-  const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  fetch(window.UNIGO_NEWS_URL).then(r => r.json()).then(d => {
-    if (!d.items || !d.items.length) throw 0;
-    box.innerHTML = d.items.map(n =>
-      '<a href="' + esc(n.url) + '" target="_blank" rel="noopener" style="display:flex;gap:10px;text-decoration:none;color:inherit">' +
-      (n.image ? '<img src="' + esc(n.image) + '" alt="" loading="lazy" style="width:84px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0">' : '') +
-      '<div style="min-width:0"><div style="font-size:13px;font-weight:700;line-height:1.25">' + esc(n.title) + '</div>' +
-      '<div style="font-size:11px;color:#6b7280;margin-top:2px">' + esc(n.date) + '</div></div></a>').join('');
-  }).catch(() => { box.innerHTML = '<p class="campus-note" style="margin:0">Aktuality se nepodařilo načíst.</p>'; });
+  try {
+    let items = (await ugTryApi('/api/public/news'))?.items;
+    if (!items || !items.length) items = ugParseNews(await ugFetchText(ugNewsSrc, t => t.includes('news-item')));
+    if (!items.length) throw 0;
+    box.innerHTML = items.map(n =>
+      '<a href="' + ugEsc(n.url) + '" target="_blank" rel="noopener" style="display:flex;gap:10px;text-decoration:none;color:inherit">' +
+      (n.image ? '<img src="' + ugEsc(n.image) + '" alt="" loading="lazy" style="width:84px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0">' : '') +
+      '<div style="min-width:0"><div style="font-size:13px;font-weight:700;line-height:1.25">' + ugEsc(n.title) + '</div>' +
+      '<div style="font-size:11px;color:#6b7280;margin-top:2px">' + ugEsc(n.date) + '</div></div></a>').join('');
+  } catch (e) { box.innerHTML = '<p class="campus-note" style="margin:0">Aktuality se nepodařilo načíst.</p>'; }
 };
-if (document.readyState !== 'loading') window.refreshCampusNews();
-else document.addEventListener('DOMContentLoaded', window.refreshCampusNews);
 
+function ugInitServices() { window.refreshCampusMenu(); window.refreshCampusNews(); }
+if (document.readyState !== 'loading') ugInitServices();
+else document.addEventListener('DOMContentLoaded', ugInitServices);
 </script>
   <!-- JAVASCRIPT LOGIKA -->
   <script>
@@ -1521,8 +1568,7 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusNews);
   .ug-board .t{font-size:18px;font-weight:800;color:#2563eb}
   .ug-board .t small{font-size:11px;color:#9ca3af;font-weight:600;margin-left:6px}
 </style>
-<style>
-:root{--campus-neutral:#00A499}
+<style>:root{--campus-neutral:#00A499}
 .campus-marker-wrap{background:none;border:0}
 .campus-marker{position:absolute;transform:translate(-50%,-50%);display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:26px;padding:0 8px;border-radius:999px;background:var(--campus-neutral);color:#fff;font:800 11px/1 Inter,sans-serif;border:2px solid #fff;box-shadow:0 4px 12px -4px rgba(0,0,0,.35);white-space:nowrap;opacity:.85}
 .campus-marker-mine{background:var(--brand-color);opacity:1;height:32px;min-width:38px;font-size:13px;z-index:10;box-shadow:0 0 0 4px color-mix(in srgb,var(--brand-color) 30%,transparent),0 6px 16px -4px rgba(0,0,0,.4)}
@@ -1623,10 +1669,8 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusNews);
 #ug-sheet .campus-search,#ug-sheet .campus-categories,#ug-sheet .campus-sheet-head{flex-shrink:0}
 #ug-sheet .campus-categories{position:relative;z-index:2;min-height:46px;align-items:center;background:#fff}
 #ug-sheet .campus-list{min-height:0;position:relative;z-index:1}
-
 </style>
-<script>
-// Zvýraznění budov aktuální fakulty v seznamu
+<script>// Zvýraznění budov aktuální fakulty v seznamu
 (function(){
   const orig = window.renderCampusList;
   if(!orig) return;
@@ -1641,7 +1685,6 @@ else document.addEventListener('DOMContentLoaded', window.refreshCampusNews);
     });
   };
 })();
-
 </script>
 </body>
 </html>
