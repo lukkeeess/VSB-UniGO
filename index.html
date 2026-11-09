@@ -485,6 +485,7 @@ window.UniGOCampus = [
   <script>// Menza + aktuality: načítá přímo z VŠB přes veřejné CORS proxy (funguje i na GitHub Pages / offline souboru).
 // Na vlastním serveru se nejdřív zkusí /api/public/*, pak proxy v pořadí.
 window.UNIGO_PROXIES = window.UNIGO_PROXIES || [
+  u => 'https://r.jina.ai/' + u,
   u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
   u => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u),
   u => 'https://cors.eu.org/' + u,
@@ -498,8 +499,8 @@ const ugText = s => { const d = document.createElement('div'); d.innerHTML = s |
 async function ugFetchText(url, check) {
   for (const p of window.UNIGO_PROXIES) {
     try {
-      const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 9000);
-      const r = await fetch(p(url), { signal: ctrl.signal }); clearTimeout(t);
+      const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 15000);
+      const r = await fetch(p(url), { signal: ctrl.signal, headers: p(url).includes('r.jina.ai') ? { 'X-Return-Format': 'html' } : {} }); clearTimeout(t);
       if (!r.ok) continue;
       const txt = await r.text();
       if (check(txt)) return txt;
@@ -1669,6 +1670,12 @@ else document.addEventListener('DOMContentLoaded', ugInitServices);
 #ug-sheet .campus-search,#ug-sheet .campus-categories,#ug-sheet .campus-sheet-head{flex-shrink:0}
 #ug-sheet .campus-categories{position:relative;z-index:2;min-height:46px;align-items:center;background:#fff}
 #ug-sheet .campus-list{min-height:0;position:relative;z-index:1}
+
+/* Hry – vše vidět bez scrollování */
+.game-box{gap:6px}.game-box>*+*{margin-top:6px !important}
+.game-box canvas{height:min(34vh,240px) !important;width:auto !important;max-width:100%}
+.game-box .arcade-cabinet{padding:6px !important}
+.game-box button{padding-top:8px !important;padding-bottom:8px !important}
 </style>
 <script>// Zvýraznění budov aktuální fakulty v seznamu
 (function(){
